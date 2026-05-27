@@ -11,9 +11,9 @@ backend:
 media_folder: "images/optimized"
 public_folder: "images/optimized"
 
-site_url: https://mittiart.com
-display_url: https://mittiart.com
-logo_url: https://mittiart.com/favicon.svg
+site_url: https://pankajjjat.github.io/Art
+display_url: https://pankajjjat.github.io/Art
+logo_url: https://pankajjjat.github.io/Art/favicon.svg
 
 collections:
   - label: "Products"

@@ -14,6 +14,8 @@ with open(os.path.join(BASE, "data", "blog.json"), "r", encoding="utf-8") as f:
 with open(os.path.join(BASE, "data", "settings.json"), "r", encoding="utf-8") as f:
     settings = json.load(f)
 
+SITE_URL = settings.get("url", "https://pankajjjat.github.io/Art").rstrip("/")
+
 def fmt_price(n):
     s = "{:,}".format(n)
     return "\u20B9" + s
@@ -109,7 +111,7 @@ for p in products:
     os.makedirs(pdir, exist_ok=True)
 
     cat_lower = p["category"].replace("-", " ")
-    canonical = f"https://mittiart.com/product/{p['slug']}/"
+    canonical = f"{SITE_URL}/product/{p['slug']}/"
 
     # Build the action button & stock badge
     if in_stock:
@@ -136,18 +138,18 @@ for p in products:
   <meta property="og:description" content="{p['description'][:120]}" />
   <meta property="og:type" content="product" />
   <meta property="og:url" content="{canonical}" />
-  <meta property="og:image" content="https://mittiart.com/images/optimized/{jpg}" />
+  <meta property="og:image" content="{SITE_URL}/images/optimized/{jpg}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{p['name']} — MITTI Art Gallery" />
   <meta name="twitter:description" content="{p['description'][:120]}" />
-  <meta name="twitter:image" content="https://mittiart.com/images/optimized/{jpg}" />
+  <meta name="twitter:image" content="{SITE_URL}/images/optimized/{jpg}" />
   <script type="application/ld+json">
   {{
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "{schema_name}",
     "description": "{schema_desc}",
-    "image": "https://mittiart.com/images/optimized/{jpg}",
+    "image": "{SITE_URL}/images/optimized/{jpg}",
     "category": "{p['cat_clean']}",
     "offers": {{
       "@type": "Offer",
@@ -199,7 +201,7 @@ for p in products:
             <span>Share</span>
             <a href="https://www.facebook.com/sharer/sharer.php?u={canonical}" target="_blank">Facebook</a>
             <a href="https://twitter.com/intent/tweet?text={p['name']} by MITTI&amp;url={canonical}" target="_blank">Twitter</a>
-            <a href="https://pinterest.com/pin/create/button/?url={canonical}&amp;media=https://mittiart.com/images/optimized/{jpg}&amp;description={p['name']}" target="_blank">Pinterest</a>
+            <a href="https://pinterest.com/pin/create/button/?url={canonical}&amp;media={SITE_URL}/images/optimized/{jpg}&amp;description={p['name']}" target="_blank">Pinterest</a>
             <a href="https://api.whatsapp.com/send?text={p['name']} - {canonical}" target="_blank">WhatsApp</a>
           </div>
         </div>
@@ -267,18 +269,18 @@ blog_index = f'''<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MITTI Blog &mdash; Art Stories, Guides &amp; Inspiration | MITTI Art Gallery</title>
   <meta name="description" content="Explore the MITTI art blog &mdash; stories about lippan art, Indian handicrafts, home decor ideas, and the artists behind the work." />
-  <link rel="canonical" href="https://mittiart.com/blog/" />
+  <link rel="canonical" href="{SITE_URL}/blog/" />
   <meta property="og:title" content="MITTI Blog &mdash; Art Stories, Guides &amp; Inspiration" />
   <meta property="og:description" content="Explore the MITTI art blog &mdash; stories about lippan art, Indian handicrafts, and home decor ideas." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://mittiart.com/blog/" />
+  <meta property="og:url" content="{SITE_URL}/blog/" />
   <script type="application/ld+json">
   {{
     "@context": "https://schema.org",
     "@type": "Blog",
     "name": "MITTI Art Blog",
     "description": "Stories, guides, and inspiration from MITTI Art Gallery.",
-    "url": "https://mittiart.com/blog/"
+    "url": "{SITE_URL}/blog/"
   }}
   </script>
   <link rel="stylesheet" href="../css/style.css" />
@@ -491,23 +493,23 @@ for bp in blog_posts_data:
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{bp['title']} &mdash; MITTI Art Blog</title>
   <meta name="description" content="{bp['excerpt'][:150]}" />
-  <link rel="canonical" href="https://mittiart.com/blog/{bp['slug']}/" />
+  <link rel="canonical" href="{SITE_URL}/blog/{bp['slug']}/" />
   <meta property="og:title" content="{bp['title']}" />
   <meta property="og:description" content="{bp['excerpt'][:150]}" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://mittiart.com/blog/{bp['slug']}/" />
-  <meta property="og:image" content="https://mittiart.com/images/optimized/{bp['image']}" />
+  <meta property="og:url" content="{SITE_URL}/blog/{bp['slug']}/" />
+  <meta property="og:image" content="{SITE_URL}/images/optimized/{bp['image']}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{bp['title']}" />
   <meta name="twitter:description" content="{bp['excerpt'][:150]}" />
-  <meta name="twitter:image" content="https://mittiart.com/images/optimized/{bp['image']}" />
+  <meta name="twitter:image" content="{SITE_URL}/images/optimized/{bp['image']}" />
   <script type="application/ld+json">
   {{
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "{bp['title']}",
     "description": "{bp['excerpt'][:150]}",
-    "image": "https://mittiart.com/images/optimized/{bp['image']}",
+    "image": "{SITE_URL}/images/optimized/{bp['image']}",
     "datePublished": "{bp['date']}",
     "author": {{
       "@type": "Organization",
@@ -618,10 +620,10 @@ for slug, (title, qa_list) in pages.items():
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title} | MITTI Art Gallery</title>
   <meta name="description" content="{meta_desc}." />
-  <link rel="canonical" href="https://mittiart.com/{slug}/" />
+  <link rel="canonical" href="{SITE_URL}/{slug}/" />
   <meta property="og:title" content="{title}" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://mittiart.com/{slug}/" />
+  <meta property="og:url" content="{SITE_URL}/{slug}/" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="../favicon.svg" />
 </head>
