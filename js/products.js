@@ -153,7 +153,7 @@ const blogPosts = [
     readTime: 5,
     date: "Feb 1, 2026",
     excerpt: "Two of India’s most beloved folk art forms — Lippan and Warli — explained. Materials, techniques, origins, and which one suits your space better.",
-    image: "images/optimized/blog-lippan-vs-warli.jpg",
+    image: "images/optimized/blog-lippan-vs-warli.png",
     imageFallback: "images/svg/blog-lippan-vs-warli.svg"
   },
   {

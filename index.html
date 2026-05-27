@@ -230,7 +230,7 @@
       <p class="section-subtitle">Love a piece? Have a question? We'd love to hear from you.</p>
       <div class="contact-grid">
         <div class="contact-form-wrapper">
-          <form class="contact-form" id="contactForm" action="https://formspree.io/f/your-form-id" method="POST">
+          <form class="contact-form" id="contactForm" onsubmit="return handleContact(event)">
             <div class="form-field">
               <label for="name">Your name</label>
               <input type="text" id="name" name="name" required placeholder="e.g. Priya Sharma" />
@@ -244,6 +244,7 @@
               <textarea id="message" name="message" required placeholder="I'd love to know more about..."></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Send message</button>
+            <div id="formStatus" style="margin-top:0.8rem;font-size:0.9rem"></div>
           </form>
         </div>
         <div class="contact-info">
@@ -258,7 +259,7 @@
             <div class="contact-item-icon">&#128222;</div>
             <div>
               <div class="contact-item-label">Phone</div>
-              <div class="contact-item-value">+91-XXX-XXX-XXXX</div>
+              <div class="contact-item-value">+91 87708 58280</div>
             </div>
           </div>
           <div class="contact-item">
@@ -368,6 +369,40 @@
 
   <!-- Toast -->
   <div class="toast" id="toast"></div>
+
+  <script>
+  function handleContact(e) {
+    e.preventDefault();
+    var form = e.target;
+    var btn = form.querySelector('button[type="submit"]');
+    var status = document.getElementById('formStatus');
+    var name = document.getElementById('name').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var message = document.getElementById('message').value.trim();
+    if (!name || !email || !message) { status.textContent = 'Please fill in all fields.'; status.style.color = '#C2623E'; return false; }
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    status.textContent = '';
+    // Try API POST first, fallback to mailto
+    var payload = { name: name, email: email, message: message };
+    var apiBase = (typeof MITTI_API !== 'undefined' && MITTI_API.isConfigured) ? MITTI_API.API_BASE : 'https://script.google.com/macros/s/AKfycbxHPfAn6qtczvsNfneGCaTzAxrgWNAxWw19wj34eeReEa9I4r5H2dnRpWFEe1O1Ltl1Zw/exec';
+    fetch(apiBase + '?action=contact', { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      .then(function() {
+        status.textContent = 'Thanks ' + name + '! We\'ll get back to you soon.';
+        status.style.color = '#D4A373';
+        form.reset();
+        btn.disabled = false;
+        btn.textContent = 'Send message';
+      })
+      .catch(function() {
+        status.innerHTML = 'Couldn\'t send right now. Please email us directly at <a href="mailto:hello@mittiart.com" style="color:#D4A373">hello@mittiart.com</a>';
+        status.style.color = '#A89880';
+        btn.disabled = false;
+        btn.textContent = 'Send message';
+      });
+    return false;
+  }
+  </script>
 
   <!-- CMS: Google Sheets-powered data layer -->
   <script src="js/api.js"></script>

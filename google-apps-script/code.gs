@@ -11,7 +11,7 @@
  *
  * SHEET TABS REQUIRED:
  *   Artworks, Categories, Testimonials, FAQs, Website_Content,
- *   Orders, Blog_Posts, Image_Manager
+ *   Orders, Blog_Posts, Image_Manager, Contacts
  */
 
 // ─── CONFIG ────────────────────────────────────────────────────────────────
@@ -23,7 +23,8 @@ const SHEET_NAMES = {
   content:    'Website_Content',
   orders:     'Orders',
   blog:       'Blog_Posts',
-  images:     'Image_Manager'
+  images:     'Image_Manager',
+  contacts:   'Contacts'
 };
 
 // ─── MAIN ENTRY POINT ──────────────────────────────────────────────────────
@@ -224,17 +225,14 @@ function doPost(e) {
     }
     
     if (data.action === 'contact') {
-      const sheet = getSheet('Orders'); // reuse Orders sheet for contact messages too
+      const sheet = getSheet('Contacts');
       sheet.appendRow([
-        'CONTACT-' + Date.now(),
+        new Date().toISOString(),
         data.name || '',
-        data.phone || '',
         data.email || '',
-        '—',
-        'Contact Message: ' + (data.message || ''),
-        0,
-        'Contact',
-        new Date().toISOString()
+        data.phone || '',
+        data.message || '',
+        'New'
       ]);
       return ContentService
         .createTextOutput(JSON.stringify({ success: true, message: 'Message received' }))
@@ -325,7 +323,7 @@ function createAllSheets() {
       ['id','title','slug','category','readTime','date','excerpt','image','svg','content'],
       [1,'What Is Lippan Art? India\'s Ancient Mirror Craft Explained','what-is-lippan-art-india','Lippan Art',6,'Jan 15, 2026','Discover the centuries-old tradition of Lippan Art — the mud-and-mirror craft from Kutch, Gujarat.','blog-lippan-intro.jpg','blog-lippan-intro.svg','<p>Lippan art (also known as mud-mirror work) is a traditional craft from the Kutch region of Gujarat, India. The word "lippan" comes from the Gujarati word for "coating" — referring to the clay-mud mixture that forms the base of this art form.</p><p>Artists mix clay, dung, and natural binders to create a pliable paste, then shape intricate patterns on a wooden or cloth base. Small mirror pieces (called "abhla" or "abhla") are embedded into the wet clay. Once dry, the piece is sealed with natural varnish.</p><p>What makes lippan special is its ability to catch and scatter light — the mirrors dance as you move around the piece, creating an ever-changing visual experience. Traditionally, lippan adorned the walls of Kutchi homes as symbols of prosperity and protection.</p><p>Today, MITTI reimagines this ancient craft for contemporary interiors — combining traditional techniques with modern designs, color palettes, and sizes suited for urban homes.</p>'],
       [2,'Modern Lippan Wall Decor: 7 Stunning Ideas for Your Home','modern-lippan-wall-decor-ideas','Home Decor',8,'Jan 22, 2026','From minimalist white-and-gold compositions to bold terracotta statements — explore 7 modern lippan wall decor ideas.','blog-lippan-decor.jpg','blog-lippan-decor.svg','<p>Lippan art has moved far beyond its traditional roots. Here are 7 modern ways to incorporate this stunning mirror-work craft into your contemporary home:</p><ol><li><strong>Minimalist White + Gold:</strong> A single large lippan piece in white clay with gold-tinted mirrors against a white wall creates an ethereal, gallery-like feel.</li><li><strong>Terracotta Statement Wall:</strong> Cover a full wall with terracotta-toned lippan tiles embedded with amber mirrors.</li><li><strong>Lippan Coasters & Trays:</strong> Small functional pieces that bring texture to your coffee table.</li><li><strong>Geometric Compositions:</strong> Modern lippan pieces with sharp geometric patterns rather than traditional floral motifs.</li><li><strong>Lippan Headboard:</strong> A large lippan panel behind your bed creates a warm, textured focal point.</li><li><strong>Entryway Mirror:</strong> A lippan-framed mirror for your foyer — practical and beautiful.</li><li><strong>Layered Gallery Wall:</strong> Mix lippan pieces with abstract canvases, photographs, and textiles.</li></ol><p>Each idea works because lippan\'s tactile, light-catching nature adds warmth that flat art can\'t match.</p>'],
-      [3,'Lippan Art vs Warli Art: Key Differences Every Art Lover Should Know','lippan-art-vs-warli-art','Art Guide',5,'Feb 1, 2026','Two of India\'s most beloved folk art forms — Lippan and Warli — explained. Materials, techniques, origins, and which one suits your space better.','blog-lippan-vs-warli.jpg','blog-lippan-vs-warli.svg','<p>India\'s folk art traditions are incredibly diverse. Two of the most popular — Lippan Art and Warli Art — often get confused. Here\'s a clear breakdown:</p><table><tr><th>Feature</th><th>Lippan Art</th><th>Warli Art</th></tr><tr><td>Origin</td><td>Kutch, Gujarat</td><td>Palghar, Maharashtra</td></tr><tr><td>Material</td><td>Clay, dung, mirrors</td><td>Rice paste, cow dung, bamboo sticks</td></tr><tr><td>Technique</td><td>Mud-relief with embedded mirrors</td><td>Painted stick figures on mud walls</td></tr><tr><td>Key motif</td><td>Geometric patterns, mirrors</td><td>Humans, animals, daily life scenes</td></tr><tr><td>Color palette</td><td>Earth tones, white, gold</td><td>White pigment on brown/red background</td></tr><tr><td>Modern use</td><td>Wall art, coasters, decor objects</td><td>Canvas art, fabric prints, murals</td></tr><tr><td>Light effect</td><td>Mirrors reflect light beautifully</td><td>Matte finish, no reflection</td></tr></table>']
+      [3,'Lippan Art vs Warli Art: Key Differences Every Art Lover Should Know','lippan-art-vs-warli-art','Art Guide',5,'Feb 1, 2026','Two of India\'s most beloved folk art forms — Lippan and Warli — explained. Materials, techniques, origins, and which one suits your space better.','blog-lippan-vs-warli.png','blog-lippan-vs-warli.svg','<p>India\'s folk art traditions are incredibly diverse. Two of the most popular — Lippan Art and Warli Art — often get confused. Here\'s a clear breakdown:</p><table><tr><th>Feature</th><th>Lippan Art</th><th>Warli Art</th></tr><tr><td>Origin</td><td>Kutch, Gujarat</td><td>Palghar, Maharashtra</td></tr><tr><td>Material</td><td>Clay, dung, mirrors</td><td>Rice paste, cow dung, bamboo sticks</td></tr><tr><td>Technique</td><td>Mud-relief with embedded mirrors</td><td>Painted stick figures on mud walls</td></tr><tr><td>Key motif</td><td>Geometric patterns, mirrors</td><td>Humans, animals, daily life scenes</td></tr><tr><td>Color palette</td><td>Earth tones, white, gold</td><td>White pigment on brown/red background</td></tr><tr><td>Modern use</td><td>Wall art, coasters, decor objects</td><td>Canvas art, fabric prints, murals</td></tr><tr><td>Light effect</td><td>Mirrors reflect light beautifully</td><td>Matte finish, no reflection</td></tr></table>']
     ],
     'Image_Manager': [
       ['title','image_url','thumbnail_url'],
@@ -342,6 +340,9 @@ function createAllSheets() {
       ['Urban Layers','images/optimized/modern-art_4.jpg','images/optimized/modern-art_4.jpg'],
       ['Modern Symmetry','images/optimized/modern-art_8.jpg','images/optimized/modern-art_8.jpg'],
       ['Ornate Opulence','images/optimized/wall-decor_12.jpg','images/optimized/wall-decor_12.jpg']
+    ],
+    'Contacts': [
+      ['timestamp','name','email','phone','message','status']
     ]
   };
   

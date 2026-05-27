@@ -132,16 +132,16 @@ for p in products:
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{p['name']} — MITTI Art Gallery | {p['cat_clean']}</title>
-  <meta name="description" content="{p['description'][:120]}" />
+  <meta name="description" content="{p['description']}" />
   <link rel="canonical" href="{canonical}" />
   <meta property="og:title" content="{p['name']} — MITTI Art Gallery" />
-  <meta property="og:description" content="{p['description'][:120]}" />
+  <meta property="og:description" content="{p['description']}" />
   <meta property="og:type" content="product" />
   <meta property="og:url" content="{canonical}" />
   <meta property="og:image" content="{SITE_URL}/images/optimized/{jpg}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{p['name']} — MITTI Art Gallery" />
-  <meta name="twitter:description" content="{p['description'][:120]}" />
+  <meta name="twitter:description" content="{p['description']}" />
   <meta name="twitter:image" content="{SITE_URL}/images/optimized/{jpg}" />
   <script type="application/ld+json">
   {{

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pankajjjat.github.io/Art/sitemap.xml

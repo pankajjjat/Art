@@ -53,7 +53,7 @@ for p in products:
     os.makedirs(pdir, exist_ok=True)
 
     cat_lower = p["category"].replace("-", " ")
-    canonical = f"https://mittiart.com/product/{p['slug']}/"
+    canonical = f"https://pankajjjat.github.io/Art/product/{p['slug']}/"
 
     # Build the addToCart string safely
     name_escaped = p['name'].replace("'", "\\'")
@@ -65,24 +65,24 @@ for p in products:
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{p['name']} — MITTI Art Gallery | {p['cat_clean']}</title>
-  <meta name="description" content="{p['description'][:120]}" />
+  <meta name="description" content="{p['description']}" />
   <link rel="canonical" href="{canonical}" />
   <meta property="og:title" content="{p['name']} — MITTI Art Gallery" />
-  <meta property="og:description" content="{p['description'][:120]}" />
+  <meta property="og:description" content="{p['description']}" />
   <meta property="og:type" content="product" />
   <meta property="og:url" content="{canonical}" />
-  <meta property="og:image" content="https://mittiart.com/images/optimized/{jpg}" />
+  <meta property="og:image" content="https://pankajjjat.github.io/Art/images/optimized/{jpg}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{p['name']} — MITTI Art Gallery" />
-  <meta name="twitter:description" content="{p['description'][:120]}" />
-  <meta name="twitter:image" content="https://mittiart.com/images/optimized/{jpg}" />
+  <meta name="twitter:description" content="{p['description']}" />
+  <meta name="twitter:image" content="https://pankajjjat.github.io/Art/images/optimized/{jpg}" />
   <script type="application/ld+json">
   {{
     "@context": "https://schema.org",
     "@type": "Product",
     "name": "{p['name']}",
     "description": "{p['description']}",
-    "image": "https://mittiart.com/images/optimized/{jpg}",
+    "image": "https://pankajjjat.github.io/Art/images/optimized/{jpg}",
     "category": "{p['cat_clean']}",
     "offers": {{
       "@type": "Offer",
@@ -133,7 +133,7 @@ for p in products:
             <span>Share</span>
             <a href="https://www.facebook.com/sharer/sharer.php?u={canonical}" target="_blank">Facebook</a>
             <a href="https://twitter.com/intent/tweet?text={p['name']} by MITTI&url={canonical}" target="_blank">Twitter</a>
-            <a href="https://pinterest.com/pin/create/button/?url={canonical}&media=https://mittiart.com/images/optimized/{jpg}&description={p['name']}" target="_blank">Pinterest</a>
+            <a href="https://pinterest.com/pin/create/button/?url={canonical}&media=https://pankajjjat.github.io/Art/images/optimized/{jpg}&description={p['name']}" target="_blank">Pinterest</a>
             <a href="https://api.whatsapp.com/send?text={p['name']} - {canonical}" target="_blank">WhatsApp</a>
           </div>
         </div>
@@ -196,7 +196,7 @@ for p in products:
 blog_posts_data = [
     {"id":1,"title":"What Is Lippan Art? India's Ancient Mirror Craft Explained","slug":"what-is-lippan-art-india","category":"Lippan Art","readTime":6,"date":"Jan 15, 2026","excerpt":"Discover the centuries-old tradition of Lippan Art — the mud-and-mirror craft from Kutch, Gujarat. Learn how this ancient technique is being reimagined for modern Indian homes.","image":"blog-lippan-intro.jpg", "imageFallback":"blog-lippan-intro.svg"},
     {"id":2,"title":"Modern Lippan Wall Decor: 7 Stunning Ideas for Your Home","slug":"modern-lippan-wall-decor-ideas","category":"Home Decor","readTime":8,"date":"Jan 22, 2026","excerpt":"From minimalist white-and-gold compositions to bold terracotta statements — explore 7 modern lippan wall decor ideas that transform any room into a gallery.","image":"blog-lippan-decor.jpg", "imageFallback":"blog-lippan-decor.svg"},
-    {"id":3,"title":"Lippan Art vs Warli Art: Key Differences Every Art Lover Should Know","slug":"lippan-art-vs-warli-art","category":"Art Guide","readTime":5,"date":"Feb 1, 2026","excerpt":"Two of India's most beloved folk art forms — Lippan and Warli — explained. Materials, techniques, origins, and which one suits your space better.","image":"blog-lippan-vs-warli.jpg", "imageFallback":"blog-lippan-vs-warli.svg"},
+    {"id":3,"title":"Lippan Art vs Warli Art: Key Differences Every Art Lover Should Know","slug":"lippan-art-vs-warli-art","category":"Art Guide","readTime":5,"date":"Feb 1, 2026","excerpt":"Two of India's most beloved folk art forms — Lippan and Warli — explained. Materials, techniques, origins, and which one suits your space better.","image":"blog-lippan-vs-warli.png", "imageFallback":"blog-lippan-vs-warli.svg"},
     {"id":4,"title":"How to Display Lippan Art in Your Home: A Complete Guide","slug":"how-to-display-lippan-art-home","category":"Home Decor","readTime":7,"date":"Feb 10, 2026","excerpt":"Lighting, placement, framing, and pairing tips for lippan art. Make your mirror-work pieces shine with these expert display strategies.","image":"blog-display-guide.jpg", "imageFallback":"blog-display-guide.svg"},
     {"id":5,"title":"Lippan Art Gift Guide: 5 Unique Indian Handicraft Gifts for Every Occasion","slug":"lippan-art-gift-guide","category":"Gifting","readTime":6,"date":"Feb 18, 2026","excerpt":"Looking for a meaningful gift? From housewarming to weddings — lippan art pieces make unforgettable, handcrafted presents that tell a story.","image":"blog-gift-guide.jpg", "imageFallback":"blog-gift-guide.svg"},
 ]
@@ -208,18 +208,18 @@ blog_index = """<!DOCTYPE html>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MITTI Blog — Art Stories, Guides & Inspiration | MITTI Art Gallery</title>
   <meta name="description" content="Explore the MITTI art blog — stories about lippan art, Indian handicrafts, home decor ideas, and the artists behind the work." />
-  <link rel="canonical" href="https://mittiart.com/blog/" />
+  <link rel="canonical" href="https://pankajjjat.github.io/Art/blog/" />
   <meta property="og:title" content="MITTI Blog — Art Stories, Guides & Inspiration" />
   <meta property="og:description" content="Explore the MITTI art blog — stories about lippan art, Indian handicrafts, and home decor ideas." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://mittiart.com/blog/" />
+  <meta property="og:url" content="https://pankajjjat.github.io/Art/blog/" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "Blog",
     "name": "MITTI Art Blog",
     "description": "Stories, guides, and inspiration from MITTI Art Gallery.",
-    "url": "https://mittiart.com/blog/",
+    "url": "https://pankajjjat.github.io/Art/blog/",
     "publisher": {
       "@type": "Organization",
       "name": "MITTI Art Gallery"
@@ -450,23 +450,23 @@ for bp in blog_posts_data:
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{bp['title']} — MITTI Art Blog</title>
   <meta name="description" content="{bp['excerpt']}" />
-  <link rel="canonical" href="https://mittiart.com/blog/{bp['slug']}/" />
+  <link rel="canonical" href="https://pankajjjat.github.io/Art/blog/{bp['slug']}/" />
   <meta property="og:title" content="{bp['title']}" />
   <meta property="og:description" content="{bp['excerpt']}" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://mittiart.com/blog/{bp['slug']}/" />
-  <meta property="og:image" content="https://mittiart.com/images/optimized/{bp['image']}" />
+  <meta property="og:url" content="https://pankajjjat.github.io/Art/blog/{bp['slug']}/" />
+  <meta property="og:image" content="https://pankajjjat.github.io/Art/images/optimized/{bp['image']}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{bp['title']}" />
   <meta name="twitter:description" content="{bp['excerpt']}" />
-  <meta name="twitter:image" content="https://mittiart.com/images/optimized/{bp['image']}" />
+  <meta name="twitter:image" content="https://pankajjjat.github.io/Art/images/optimized/{bp['image']}" />
   <script type="application/ld+json">
   {{
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": "{bp['title']}",
     "description": "{bp['excerpt']}",
-    "image": "https://mittiart.com/images/optimized/{bp['image']}",
+    "image": "https://pankajjjat.github.io/Art/images/optimized/{bp['image']}",
     "datePublished": "{bp['date']}",
     "author": {{
       "@type": "Organization",
@@ -576,10 +576,10 @@ for slug, (title, qa_list) in pages.items():
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title} | MITTI Art Gallery</title>
   <meta name="description" content="{'FAQ about MITTI Art Gallery' if slug == 'faq' else 'Shipping and delivery information for MITTI Art Gallery' if slug == 'shipping' else 'Payment methods and information for MITTI Art Gallery'}." />
-  <link rel="canonical" href="https://mittiart.com/{slug}/" />
+  <link rel="canonical" href="https://pankajjjat.github.io/Art/{slug}/" />
   <meta property="og:title" content="{title}" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://mittiart.com/{slug}/" />
+  <meta property="og:url" content="https://pankajjjat.github.io/Art/{slug}/" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="../favicon.svg" />
 </head>

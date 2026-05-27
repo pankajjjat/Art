@@ -4,7 +4,7 @@
 
 1. Go to [sheets.new](https://sheets.new)
 2. Rename the spreadsheet to **MITTI CMS**
-3. Run the **createAllSheets()** function (see Step 3) — this auto-creates all 8 tabs with headers and sample data
+3. Run the **createAllSheets()** function (see Step 3) — this auto-creates all tabs with headers and sample data
 
 ## Step 2: Link Apps Script
 
@@ -17,7 +17,7 @@
 
 1. In the Apps Script editor, select `createAllSheets` from the dropdown
 2. Click **Run** — it will ask for permissions (review your own sheet data)
-3. After running, check your Google Sheet — all 8 tabs should exist with sample data
+3. After running, check your Google Sheet — all tabs should exist with sample data
 
 ## Step 4: Deploy as Web App
 
@@ -58,6 +58,7 @@ Once deployed, the API responds to:
 | `?action=blog` | Blog posts |
 | `?action=images` | Image URL manager |
 | `?action=orders` | Customer orders |
+| `?action=contact` | Contact form (POST with name, email, message) |
 | `?action=all` | Everything in one request |
 | `?action=stats` | Shop statistics |
 
@@ -73,6 +74,8 @@ All responses follow the format:
 **To change site text:** Edit the Website_Content sheet → changes appear on refresh
 
 **To add a blog post:** Add a row to Blog_Posts with title, slug, date, excerpt, content → appears on blog index
+
+**Inquiries:** Contact form submissions are stored in the Contacts sheet (columns: timestamp, name, email, phone, message, status)
 
 ## Permissions Note
 

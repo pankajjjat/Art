@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found — MITTI Art Gallery</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="favicon.svg" />
+  <meta name="robots" content="noindex" />
+  <style>
+    .error-page { min-height: 80vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 6rem 1.5rem; }
+    .error-code { font-size: 6rem; font-family: var(--font-serif,serif); color: var(--terracotta,#C2623E); line-height: 1; margin-bottom: 0.5rem; }
+    .error-title { font-size: 1.5rem; color: var(--text-on-dark); margin-bottom: 1rem; }
+    .error-text { color: var(--text-muted); max-width: 420px; margin: 0 auto 2rem; line-height: 1.7; font-size: 0.95rem; }
+    .error-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .error-actions .btn { min-width: 140px; }
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="./" class="logo">MI<span>TTI</span><span class="logo-tagline">Earth &middot; Art &middot; Belonging</span></a>
+    </div>
+  </nav>
+
+  <main class="error-page">
+    <div>
+      <div class="error-code">404</div>
+      <h1 class="error-title">This page wandered off</h1>
+      <p class="error-text">
+        Like clay waiting to be shaped, some paths lead to undiscovered places.
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+      <div class="error-actions">
+        <a href="./" class="btn btn-primary">Back to home</a>
+        <a href="./#gallery" class="btn btn-secondary">Browse gallery</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" style="margin-top:0">
+    <div class="container">
+      <div class="footer-bottom">&copy; 2026 MITTI Art Gallery. Made with earth in India.</div>
+    </div>
+  </footer>
+</body>
+</html>
