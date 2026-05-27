@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+<defs>
+  <radialGradient id="bg"><stop offset="0%" stop-color="#c6663d"/><stop offset="100%" stop-color="#1a0800"/></radialGradient>
+  <radialGradient id="mirror"><stop offset="0%" stop-color="#fff" stop-opacity=".8"/><stop offset="100%" stop-color="#d4a056" stop-opacity=".3"/></radialGradient>
+</defs>
+<rect width="800" height="600" fill="url(#bg)"/>
+<circle cx="400" cy="300" r="140" fill="url(#mirror)" opacity=".6"/>
+<circle cx="400" cy="300" r="100" fill="none" stroke="#f0e6da" stroke-width="2" opacity=".4"/>
+<circle cx="400" cy="300" r="60" fill="url(#mirror)" opacity=".5"/>
+<circle cx="340" cy="240" r="10" fill="#f0e6da" opacity=".6"/>
+<circle cx="460" cy="240" r="10" fill="#f0e6da" opacity=".6"/>
+<circle cx="340" cy="360" r="10" fill="#f0e6da" opacity=".6"/>
+<circle cx="460" cy="360" r="10" fill="#f0e6da" opacity=".6"/>
+<circle cx="280" cy="300" r="6" fill="#f0e6da" opacity=".4"/>
+<circle cx="520" cy="300" r="6" fill="#f0e6da" opacity=".4"/>
+<path d="M400,160 L440,240 L520,250 L460,310 L480,390 L400,340 L320,390 L340,310 L280,250 L360,240 Z" fill="none" stroke="#f0e6da" stroke-width="1" opacity=".3"/>
+</svg>

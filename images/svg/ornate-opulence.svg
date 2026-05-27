@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+<defs><radialGradient id="oo1"><stop offset="0%" stop-color="#3a1a0a"/><stop offset="100%" stop-color="#1a0800"/></radialGradient></defs>
+<rect width="800" height="600" fill="url(#oo1)"/>
+<rect x="100" y="50" width="600" height="500" rx="4" fill="none" stroke="#d4a056" stroke-width="2" opacity=".5"/>
+<rect x="130" y="80" width="540" height="440" rx="2" fill="none" stroke="#d4a056" stroke-width="1" opacity=".3"/>
+<rect x="160" y="110" width="480" height="380" rx="2" fill="none" stroke="#c68a3d" stroke-width="1" opacity=".4"/>
+<circle cx="400" cy="300" r="120" fill="none" stroke="#d4a056" stroke-width="1.5" opacity=".4"/>
+<circle cx="400" cy="300" r="90" fill="none" stroke="#d4a056" stroke-width="1" opacity=".3"/>
+<circle cx="400" cy="300" r="60" fill="none" stroke="#e0b470" stroke-width="1.5" opacity=".5"/>
+<circle cx="400" cy="300" r="30" fill="#d4a056" opacity=".12"/>
+<circle cx="400" cy="300" r="8" fill="#e0b470" opacity=".6"/>
+<!-- Corner ornaments -->
+<g fill="#d4a056" opacity=".4">
+<circle cx="170" cy="130" r="6"/><circle cx="630" cy="130" r="6"/>
+<circle cx="170" cy="470" r="6"/><circle cx="630" cy="470" r="6"/>
+<circle cx="260" cy="110" r="4"/><circle cx="540" cy="110" r="4"/>
+<circle cx="260" cy="490" r="4"/><circle cx="540" cy="490" r="4"/>
+</g>
+</svg>

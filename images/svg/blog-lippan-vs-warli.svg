@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400">
+<defs><linearGradient id="bw1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#3a2a1a"/><stop offset="100%" stop-color="#1a0a00"/></linearGradient></defs>
+<rect width="800" height="400" fill="url(#bw1)"/>
+<circle cx="280" cy="200" r="100" fill="none" stroke="#d4a056" stroke-width="1" opacity=".4"/>
+<circle cx="520" cy="200" r="100" fill="none" stroke="#c6663d" stroke-width="1" opacity=".4"/>
+<circle cx="280" cy="200" r="50" fill="none" stroke="#d4a056" stroke-width="1" opacity=".5"/>
+<circle cx="520" cy="200" r="50" fill="none" stroke="#c6663d" stroke-width="1" opacity=".5"/>
+<g fill="#d4a056" opacity=".5"><circle cx="280" cy="100" r="3"/><circle cx="280" cy="300" r="3"/><circle cx="180" cy="200" r="3"/><circle cx="380" cy="200" r="3"/></g>
+<g fill="#c6663d" opacity=".5"><circle cx="520" cy="100" r="3"/><circle cx="520" cy="300" r="3"/><circle cx="420" cy="200" r="3"/><circle cx="620" cy="200" r="3"/></g>
+<text x="400" y="370" text-anchor="middle" font-family="Georgia,serif" font-size="14" fill="#f0e6da" opacity=".4">✦ ✦ ✦</text>
+</svg>

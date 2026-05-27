@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MITTI — Earth. Art. Belonging. | Original Indian Art Gallery</title>
+  <meta name="description" content="MITTI Art Gallery — handcrafted Indian paintings, lippan art, and wall decor. From earth, for the wall. Shop original pieces rooted in Indian tradition." />
+  <meta name="keywords" content="Indian art, lippan art, original paintings, MITTI, handcrafted wall decor, Kutch art, Indian folk art, abstract art India" />
+  <meta name="author" content="MITTI Art" />
+  <link rel="canonical" href="https://mittiart.com/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="MITTI — Earth. Art. Belonging." />
+  <meta property="og:description" content="Handcrafted Indian paintings, lippan art, and wall decor. From earth, for the wall." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mittiart.com/" />
+  <meta property="og:image" content="https://mittiart.com/images/optimized/og-image.jpg" />
+  <meta property="og:site_name" content="MITTI Art Gallery" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MITTI — Earth. Art. Belonging." />
+  <meta name="twitter:description" content="Handcrafted Indian paintings, lippan art, and wall decor." />
+  <meta name="twitter:image" content="https://mittiart.com/images/optimized/og-image.jpg" />
+
+  <!-- Schema.org / JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ArtGallery",
+    "@id": "https://mittiart.com/",
+    "name": "MITTI Art Gallery",
+    "alternateName": "MITTI — Earth. Art. Belonging.",
+    "description": "Handcrafted Indian paintings, lippan art, and wall decor. Original pieces rooted in Indian tradition.",
+    "url": "https://mittiart.com/",
+    "image": "https://mittiart.com/images/optimized/og-image.jpg",
+    "telephone": "+91-XXX-XXX-XXXX",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "India"
+    },
+    "sameAs": [
+      "https://instagram.com/mittiart",
+      "https://facebook.com/mittiart"
+    ],
+    "foundingDate": "2024",
+    "founder": {
+      "@type": "Person",
+      "name": "Saumya"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
+      {"@type":"ListItem","position":1,"url":"https://mittiart.com/product/mountain-vista/"},
+      {"@type":"ListItem","position":2,"url":"https://mittiart.com/product/midnight-solitude/"},
+      {"@type":"ListItem","position":3,"url":"https://mittiart.com/product/forest-canopy/"},
+      {"@type":"ListItem","position":4,"url":"https://mittiart.com/product/golden-pastoral/"},
+      {"@type":"ListItem","position":5,"url":"https://mittiart.com/product/ethereal-mist/"},
+      {"@type":"ListItem","position":6,"url":"https://mittiart.com/product/earthen-flow/"},
+      {"@type":"ListItem","position":7,"url":"https://mittiart.com/product/textured-rhythms/"},
+      {"@type":"ListItem","position":8,"url":"https://mittiart.com/product/golden-cascade/"},
+      {"@type":"ListItem","position":9,"url":"https://mittiart.com/product/mirror-mandala/"},
+      {"@type":"ListItem","position":10,"url":"https://mittiart.com/product/geometric-radiance/"},
+      {"@type":"ListItem","position":11,"url":"https://mittiart.com/product/urban-layers/"},
+      {"@type":"ListItem","position":12,"url":"https://mittiart.com/product/modern-symmetry/"},
+      {"@type":"ListItem","position":13,"url":"https://mittiart.com/product/ornate-opulence/"}
+    ]
+  }
+  </script>
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='28' font-size='28'%3E%F0%9F%AA%94%3C/text%3E%3C/svg%3E" />
+</head>
+<body>
+  <!-- Navbar -->
+  <nav id="navbar">
+    <div class="nav-inner">
+      <a href="/" class="logo">
+        MI<span>TTI</span>
+        <span class="logo-tagline">Earth &middot; Art &middot; Belonging</span>
+      </a>
+      <button id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#gallery" class="nav-link">Gallery</a></li>
+        <li><a href="#categories" class="nav-link">Categories</a></li>
+        <li><a href="#featured" class="nav-link">Featured</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="blog/" class="nav-link">Blog</a></li>
+        <li>
+          <button id="cartBtn">
+            <span>&#128722;</span>
+            <span id="cartBadge">0</span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div id="heroBg">
+      <img id="heroImg" src="images/optimized/landscapes_1.jpg" alt="MITTI Art Gallery — Handcrafted Indian Art" />
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="hero-badge">Original Indian Art</div>
+      <h1 class="hero-title">
+        From <em>earth</em>,<br />for the wall.
+      </h1>
+      <p class="hero-subtitle">
+        Discover original Indian paintings, handcrafted lippan art, and modern wall decor
+        &mdash; each piece rooted in tradition, made for your space.
+      </p>
+      <div class="hero-actions">
+        <a href="#gallery" class="btn btn-primary">Explore gallery &#8595;</a>
+        <a href="#categories" class="btn btn-secondary">Browse categories</a>
+      </div>
+    </div>
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="hero-scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="section" id="categories">
+    <div class="container">
+      <h2 class="section-title">Browse by category</h2>
+      <p class="section-subtitle">From rustic lippan to bold abstracts &mdash; find your piece</p>
+      <div class="cat-grid" id="catGrid"></div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section class="section" id="gallery">
+    <div class="container">
+      <h2 class="section-title">The collection</h2>
+      <p class="section-subtitle">Every piece tells a story. Find yours.</p>
+      <div class="filter-bar" id="filterBar"></div>
+      <div class="gallery-grid" id="galleryGrid"></div>
+    </div>
+  </section>
+
+  <!-- Featured -->
+  <section class="section featured-section" id="featured">
+    <div class="container">
+      <h2 class="section-title">Featured pieces</h2>
+      <p class="section-subtitle">Curated picks from our collection</p>
+      <div class="featured-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-content">
+          <h2 class="section-title">The MITTI story</h2>
+          <p class="about-text">
+            <strong>MITTI</strong> (मिट्टी) means &ldquo;earth&rdquo; &mdash; the material from which all
+            art is born. We are an Indian art brand dedicated to bringing authentic,
+            handcrafted pieces from the heart of India into your home.
+          </p>
+          <p class="about-text">
+            Every artwork in our collection is created by skilled artisans and artists
+            who work with time-honoured techniques&mdash;from the mud-and-mirror craft
+            of Kutch, Gujarat, to contemporary landscape and abstract paintings that
+            capture the soul of India.
+          </p>
+          <div class="about-values">
+            <div class="about-value">
+              <div class="about-value-icon">&#127912;</div>
+              <div class="about-value-title">Handcrafted</div>
+              <div class="about-value-text">Every piece made by hand, no mass production</div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-icon">&#127758;</div>
+              <div class="about-value-title">Rooted in India</div>
+              <div class="about-value-text">Authentic techniques and materials from Indian soil</div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-icon">&#128156;</div>
+              <div class="about-value-title">Fair trade</div>
+              <div class="about-value-text">Directly supporting artisans and their communities</div>
+            </div>
+            <div class="about-value">
+              <div class="about-value-icon">&#128666;</div>
+              <div class="about-value-title">Ready to ship</div>
+              <div class="about-value-text">Carefully packed and delivered to your doorstep</div>
+            </div>
+          </div>
+        </div>
+        <div class="about-image">
+          <img src="images/optimized/lippan-art_6.jpg" alt="MITTI Art — Handcrafted Lippan Art" loading="lazy" onerror="this.parentElement.style.background='var(--clay-mid)';this.parentElement.style.minHeight='300px';this.style.display='none'" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blog -->
+  <section class="section" id="blog">
+    <div class="container">
+      <h2 class="section-title">From the studio</h2>
+      <p class="section-subtitle">Stories, guides, and inspiration from MITTI</p>
+      <div class="blog-grid" id="blogGrid"></div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section contact-section" id="contact">
+    <div class="container">
+      <h2 class="section-title">Get in touch</h2>
+      <p class="section-subtitle">Love a piece? Have a question? We'd love to hear from you.</p>
+      <div class="contact-grid">
+        <div class="contact-form-wrapper">
+          <form class="contact-form" id="contactForm" action="https://formspree.io/f/your-form-id" method="POST">
+            <div class="form-field">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" required placeholder="e.g. Priya Sharma" />
+            </div>
+            <div class="form-field">
+              <label for="email">Email address</label>
+              <input type="email" id="email" name="email" required placeholder="priya@example.com" />
+            </div>
+            <div class="form-field">
+              <label for="message">Your message</label>
+              <textarea id="message" name="message" required placeholder="I'd love to know more about..."></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send message</button>
+          </form>
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-item-icon">&#9993;</div>
+            <div>
+              <div class="contact-item-label">Email</div>
+              <div class="contact-item-value">hello@mittiart.com</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128222;</div>
+            <div>
+              <div class="contact-item-label">Phone</div>
+              <div class="contact-item-value">+91-XXX-XXX-XXXX</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128205;</div>
+            <div>
+              <div class="contact-item-label">Location</div>
+              <div class="contact-item-value">India</div>
+            </div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-item-icon">&#128206;</div>
+            <div>
+              <div class="contact-item-label">Social</div>
+              <div class="contact-item-value">
+                <a href="https://instagram.com/mittiart" target="_blank">Instagram</a> &middot;
+                <a href="https://facebook.com/mittiart" target="_blank">Facebook</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="footer-logo">MI<span>TTI</span></div>
+          <p class="footer-tagline">
+            From earth, for the wall. MITTI brings authentic Indian handcrafted art
+            to your home &mdash; earthy, original, and made with love.
+          </p>
+        </div>
+        <div>
+          <h4>Explore</h4>
+          <ul class="footer-links">
+            <li><a href="#gallery">Gallery</a></li>
+            <li><a href="#categories">Categories</a></li>
+            <li><a href="#featured">Featured</a></li>
+            <li><a href="blog/">Blog</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Support</h4>
+          <ul class="footer-links">
+            <li><a href="faq/">FAQ</a></li>
+            <li><a href="shipping/">Shipping</a></li>
+            <li><a href="payment/">Payment</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Connect</h4>
+          <ul class="footer-links">
+            <li><a href="https://instagram.com/mittiart" target="_blank">Instagram</a></li>
+            <li><a href="https://facebook.com/mittiart" target="_blank">Facebook</a></li>
+            <li><a href="https://pinterest.com/mittiart" target="_blank">Pinterest</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        &copy; 2026 MITTI Art Gallery. All rights reserved. &middot; Made with earth in India.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <div class="lightbox-image" id="lbImgContainer">
+        <button class="lb-close" onclick="closeLightbox()">&times;</button>
+        <button class="lb-nav lb-prev" onclick="navigateLightbox(-1)">&larr;</button>
+        <button class="lb-nav lb-next" onclick="navigateLightbox(1)">&rarr;</button>
+      </div>
+      <div class="lightbox-info">
+        <div class="lb-category" id="lbCategory"></div>
+        <div class="lb-title" id="lbTitle"></div>
+        <div class="lb-price" id="lbPrice"></div>
+        <div class="lb-dimensions" id="lbDimensions"></div>
+        <div class="lb-description" id="lbDescription"></div>
+        <button class="btn btn-primary" id="lbAddBtn">Add to collection</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Overlay & Slideout -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <div class="cart-slideout" id="cartSlideout">
+    <div class="cart-header">
+      <h3>Your collection</h3>
+      <button class="cart-close" id="cartClose">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">Your collection is empty</div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <span class="cart-total-amount" id="cartTotal">&#8377;0</span>
+      </div>
+      <button class="btn btn-primary" onclick="clearCart();showToast('Collection cleared')">Clear all</button>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Scripts -->
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
