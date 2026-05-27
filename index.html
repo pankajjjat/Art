@@ -385,8 +385,8 @@
     status.textContent = '';
     // Try API POST first, fallback to mailto
     var payload = { name: name, email: email, message: message };
-    var apiBase = (typeof MITTI_API !== 'undefined' && MITTI_API.isConfigured) ? MITTI_API.API_BASE : 'https://script.google.com/macros/s/AKfycbxHPfAn6qtczvsNfneGCaTzAxrgWNAxWw19wj34eeReEa9I4r5H2dnRpWFEe1O1Ltl1Zw/exec';
-    fetch(apiBase + '?action=contact', { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+    var apiBase = (typeof MITTI_API !== 'undefined' && MITTI_API.isConfigured) ? MITTI_API.API_BASE : 'https://script.google.com/macros/s/AKfycbzkCiuErQFp0yPkysq3k518pjFSJ-n0bbT7abZ1ibHql45zAouGjeC1-y7mvyjnKcMFQg/exec';
+    fetch(apiBase + '?action=contact', { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(payload) })
       .then(function() {
         status.textContent = 'Thanks ' + name + '! We\'ll get back to you soon.';
         status.style.color = '#D4A373';
