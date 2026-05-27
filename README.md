@@ -1,219 +1,216 @@
-<p align="center">
-  <br>
-  <img src="https://img.shields.io/badge/MITTI-Earth._Art._Belonging.-C2623E?style=for-the-badge&labelColor=1A1612" alt="MITTI" width="600">
-</p>
+# MITTI (मिट्टी) — Art Gallery
 
-<br>
+**A headless CMS-driven art gallery website** built on Google Sheets, Google Apps Script, vanilla JavaScript, and GitHub Pages. Product data, blog posts, testimonials, and site content are managed through a single Google Sheet — no code edits required for day-to-day updates.
 
-<p align="center">
-  <a href="https://pankajjjat.github.io/Art/">🌍 Live Site</a> •
-  <a href="#-features">Features</a> •
-  <a href="#%EF%B8%8F-architecture">Architecture</a> •
-  <a href="#%EF%B8%8F-managing-content">Managing Content</a> •
-  <a href="#-google-sheets-setup">Setup</a>
-</p>
-
-<br>
-
-<p align="center">
-  <img src="images/optimized/og-image.jpg" alt="MITTI — Art Gallery Preview" width="90%" style="border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,0.3);">
-</p>
-
-<br>
-
-## 🌱 About
-
-**MITTI (मिट्टी)** is a handcrafted Indian art brand founded by **Saumya**. Rooted in India's rich artistic traditions — from **Lippan (mirror-work) art of Kutch** to contemporary abstract landscapes — each piece is made from earth, for the wall.
-
-> *"From earth, for the wall."*
-
-The name **MITTI** means *soil* — a reminder that every painting begins with clay, pigment, and the hands that shaped them.
+**[Live Site](https://pankajjjat.github.io/Art/)**
 
 ---
 
-## ✨ Features
-
-| | |
-|---|---|
-| 🗄️ **Google Sheets CMS** — manage products, blogs, FAQs from phone | 📱 **Zero-cost** — Google Apps Script + GitHub Pages + Sheets |
-| 🖼️ **Dynamic Gallery** — search, filter by category, featured pieces | 🎨 **Custom Art Cursor** — grain texture with earth-palette trail |
-| 🛒 **Cart + UPI Checkout** — localStorage cart, UPI payment modal | 📰 **Blog** — CMS-managed posts, auto-rendered |
-| 📍 **Dynamic JSON-LD** — schema.org ArtGallery markup auto-generated | 🐦 **Open Graph / Twitter Cards** for social sharing |
-| 🔮 **Image Fallback Chain** — JPG → SVG → gradient placeholder | ⚡ **Lightweight** — vanilla JS, no frameworks |
-
----
-
-## 🏗️ Architecture
+## Architecture
 
 ```
-┌──────────────────────┐
-│   Google Sheet       │  ← Edit on phone or laptop
-│   (8 tabs)           │
-└─────────┬────────────┘
-          │ Google Apps Script
-          ▼ JSON API
-┌──────────────────────┐
-│   api.js             │  ← Fetch layer with sessionStorage cache
-│   cms.js             │  ← Render engine (gallery, blog, FAQ, etc.)
-│   main.js            │  ← UI layer (lightbox, cart, cursor)
-└─────────┬────────────┘
-          │
-          ▼
-┌──────────────────────┐
-│   GitHub Pages       │
-│   (static HTML/JS)   │
-└──────────────────────┘
+┌──────────────────────────────────────────────────────┐
+│  Google Sheets (9 tabs)         ← CMS data source   │
+│  Artworks · Categories · Blog · FAQs · Content ...  │
+└────────────────────┬─────────────────────────────────┘
+                     │ Google Apps Script (code.gs)
+                     ▼ JSON REST API
+┌──────────────────────────────────────────────────────┐
+│  api.js             Fetch layer + sessionStorage      │
+│  cms.js             Render engine (gallery, blog,     │
+│                     FAQ, testimonials, SEO tags)     │
+│  main.js            UI (lightbox, cart, cursor,       │
+│                     navigation)                      │
+│  product-detail.js  Per-product CMS data loader      │
+└────────────────────┬─────────────────────────────────┘
+                     │
+                     ▼
+┌──────────────────────────────────────────────────────┐
+│  GitHub Pages          Static hosting, auto-deploy    │
+│  (vanilla HTML/JS)     via GitHub Actions             │
+└──────────────────────────────────────────────────────┘
 ```
 
-**Stack:** Google Sheets · Google Apps Script · Vanilla JS · GitHub Pages
+**Stack:** Google Sheets · Google Apps Script · Vanilla JavaScript · GitHub Pages · GitHub Actions
 
 ### Data Flow
 
-1. You update the **Google Sheet** (or use local JSON fallback files in `/data/`)
-2. Apps Script serves data via `?action=artworks|categories|testimonials|faq|content|blog`
-3. `api.js` fetches, caches in sessionStorage (5 min), falls back to local JSON if offline
-4. `cms.js` renders all sections dynamically: gallery grid, category cards, featured, blog, FAQ accordion, testimonials, SEO tags
-5. `main.js` handles UI: lightbox, cart, navigation, cursor effects, parallax
+1. You update the **Google Sheet** from any device
+2. **Apps Script** (`code.gs`) exposes the data as JSON endpoints (`?action=artworks`, `?action=blog`, etc.)
+3. **`api.js`** fetches from the API, caches in `sessionStorage` (5-minute TTL), and falls back to local JSON files in `/data/` if the API is unreachable
+4. **`cms.js`** renders all dynamic sections: gallery grid, category cards, featured pieces, blog feed, FAQ accordion, testimonials, and SEO meta tags
+5. **`product-detail.js`** loads the correct product data per page (name, price, description, dimensions, images) from the CMS and updates all SEO metadata, JSON-LD schema, share links, and cart integration
+6. **`main.js`** provides the UI layer: lightbox gallery, cart with UPI checkout, custom cursor, scroll effects
 
 ---
 
-## 🗄️ Managing Content
+## Features
 
-### From Phone (Once API is deployed)
-
-Everything is managed from **one Google Sheet** with these tabs:
-
-| Tab | What it controls |
-|-----|-----------------|
-| **Artworks** | Add/edit/remove products — title, price, category, image, stock |
-| **Categories** | Shop categories (Landscapes, Abstract, Lippan Art, etc.) |
-| **Testimonials** | Customer reviews that appear on the homepage |
-| **FAQs** | Accordion Q&A on the FAQ page |
-| **Website_Content** | Site text: hero title, about story, contact info, social links |
-| **Blog_Posts** | Add/edit blog posts — title, excerpt, body HTML, publish date |
-| **Orders** | Orders placed through the site (auto-populated via contact form) |
-| **Image_Manager** | Map artwork titles to image URLs (for future CDN migration) |
-
-**No GitHub commits needed** — changes appear on your site within seconds (first load may cold-start ~6s).
-
-### From Browser (GitHub.dev — Fallback)
-
-If the API is unreachable, the site falls back to local JSON files:
-
-```
-data/
-├── settings.json        ← Site name, tagline, social links
-├── products.json        ← All 13 products
-├── categories.json      ← 5 categories
-├── testimonials.json    ← Customer reviews
-├── faq.json             ← FAQ Q&A
-└── blog.json            ← Blog posts
-```
-
-1. Open [github.com/pankajjjat/Art](https://github.com/pankajjjat/Art)
-2. Press **`.` (dot key)** — VS Code in browser
-3. Edit the JSON files → commit to `main`
-4. ✅ GitHub Pages auto-deploys in ~30 seconds
+- **Headless CMS** — Google Sheets as the data layer; edit products, prices, blog posts, and site content from your phone
+- **Dynamic product pages** — 13 product pages load name, price, description, images, dimensions, and SEO metadata live from the CMS
+- **Google Image Search** — Sitemap includes `<image:image>` entries for all products and blog posts
+- **RSS feed** — Blog content available via `blog/feed.xml` with auto-discovery link
+- **Structured data** — JSON-LD (`ArtGallery`, `Product`, `BlogPosting`) on every relevant page
+- **Open Graph / Twitter Cards** — Per-page social sharing metadata (product-specific OG images)
+- **Image fallback chain** — JPG → SVG → gradient placeholder (no broken images)
+- **Lightbox gallery** — Full-screen product viewer with category filter
+- **Shopping cart** — localStorage-persisted cart with UPI payment modal
+- **Mobile responsive** — Optimised for all device sizes (hamburger nav, fluid grids, responsive hero)
+- **Accessibility** — Semantic HTML, ARIA labels, alt text on all images, keyboard navigation
 
 ---
 
-## 🛠️ Google Sheets Setup
-
-### Step 1: Create the Sheet & Deploy the API
-
-Full instructions in **`google-apps-script/DEPLOY.md`** — but the TL;DR:
-
-1. Go to [sheets.new](https://sheets.new), rename to **MITTI CMS**
-2. **Extensions → Apps Script** → paste `google-apps-script/code.gs`
-3. Run `createAllSheets()` to auto-generate all 8 tabs with sample data
-4. **Deploy → New deployment → Web app** (Anyone can access)
-5. Copy the URL → paste into `js/api.js` as `API_BASE`
-
-### Step 2: Update Your Site from Anywhere
-
-| Task | How |
-|------|-----|
-| **Add a product** | New row in Artworks sheet |
-| **Change price** | Edit the price cell |
-| **Add a blog post** | New row in Blog_Posts with title, slug, excerpt, content |
-| **Update FAQ** | Edit/Add rows in FAQs sheet |
-| **Change site tagline** | Edit Website_Content sheet |
-| **Mark sold** | Set inStock to FALSE in Artworks |
-
-### API Endpoints
-
-```
-GET ?action=artworks       → All products
-GET ?action=categories     → Shop categories
-GET ?action=testimonials   → Customer reviews
-GET ?action=faq            → FAQ entries
-GET ?action=content        → Site text (key-value map)
-GET ?action=blog           → Blog posts
-GET ?action=images         → Image URL manager
-GET ?action=stats          → Shop statistics
-GET ?action=all            → Everything in one call
-```
-
----
-
-## 🎨 Color Palette
-
-```
-🟤 #1A1612  Deep Earth / Charcoal
-🟤 #3A3028  Dark Clay
-🟤 #5A4A3A  Raw Earth
-🔴 #8A4A30  Terracotta
-🟠 #C2623E  Warm Clay
-🟡 #C4883A  Golden Amber
-⚪ #F2EBE0  Cream / Parchment
-```
-
----
-
-## 📁 File Structure
+## Project Structure
 
 ```
 mitti-website/
-├── index.html                ← Home page (CMS-driven)
+├── index.html                    Homepage (CMS-driven)
+├── 404.html                      Custom error page
+├── robots.txt                    Search engine crawl rules
+├── sitemap.xml                   27 URLs with 36 image entries
+├── favicon.svg
+│
 ├── css/
-│   └── style.css             ← All styles (FAQ + testimonial styles added)
+│   └── style.css                 All styles (single file)
+│
 ├── js/
-│   ├── api.js                ← Data fetch layer + sessionStorage cache
-│   ├── cms.js                ← Render engine (gallery, blog, FAQ, SEO)
-│   └── main.js               ← UI (lightbox, cart, cursor, effects)
-├── data/
-│   ├── products.json         ← Local fallback (API unavailable)
+│   ├── api.js                    CMS API fetch layer + sessionStorage cache
+│   ├── cms.js                    CMS render engine (gallery, blog, FAQ, SEO)
+│   ├── main.js                   UI: lightbox, cart, cursor, navigation
+│   └── product-detail.js         Per-product CMS data loader
+│
+├── data/                         Local JSON fallbacks (API unavailable)
+│   ├── products.json
 │   ├── categories.json
-│   ├── testimonials.json
 │   ├── faq.json
 │   ├── blog.json
+│   ├── testimonials.json
 │   └── settings.json
-├── google-apps-script/
-│   ├── code.gs               ← Complete Apps Script backend
-│   └── DEPLOY.md             ← Full setup guide
+│
 ├── images/
-│   ├── optimized/            ← 34 JPG product photos
-│   └── svg/                  ← 37 SVG fallbacks
-├── blog/                     ← Blog index (CMS-driven)
-├── faq/                      ← FAQ page (CMS-driven accordion)
-├── shipping/                 ← Static shipping info
-├── payment/                  ← Static payment info
-└── .github/workflows/        ← GitHub Actions deploy
+│   ├── optimized/                19 product and blog images (JPG/PNG)
+│   └── svg/                      18 SVG fallbacks
+│
+├── product/                      13 product detail pages
+├── blog/                         5 blog posts + RSS feed
+├── faq/                          FAQ page (accordion, CMS-driven)
+├── shipping/                     Shipping policy (static)
+├── payment/                      Payment info (static)
+│
+├── google-apps-script/
+│   ├── code.gs                   Apps Script backend (API + sheet management)
+│   ├── Dashboard.html           4-tab sidebar dashboard for CMS
+│   └── DEPLOY.md                 Full deployment guide
+│
+└── .github/workflows/deploy.yml  GitHub Actions auto-deploy
 ```
 
 ---
 
-## 🌐 Connect
+## Managing Content
 
-<p align="center">
-  <a href="https://www.instagram.com/saumya.chaurasia04">📷 Instagram</a> •
-  <a href="https://www.facebook.com/profile.php?id=100077641696027">📘 Facebook</a> •
-  <a href="https://pinterest.com/mittiart">📌 Pinterest</a> •
-  <a href="https://pankajjjat.github.io/Art/">🌍 MITTI Art Gallery</a>
-</p>
+All day-to-day content is managed through the **Google Sheet**. No code or GitHub commits are required for:
+
+| Data | Sheet Tab | What You Can Edit |
+|------|-----------|-------------------|
+| Products | **Artworks** | Title, price, description, category, dimensions, stock status, images |
+| Categories | **Categories** | Name, slug, display order |
+| Blog posts | **Blog_Posts** | Title, slug, excerpt, body content, publish date |
+| FAQs | **FAQs** | Question, answer, display order |
+| Testimonials | **Testimonials** | Customer name, review text, rating |
+| Site content | **Website_Content** | Hero text, about story, contact info, social links |
+| Orders | **Orders** | Auto-populated from contact form submissions |
+| Images | **Image_Manager** | Map artwork titles to image URLs (for future CDN migration) |
+
+Changes appear on the live site within seconds. The first API call after inactivity may cold-start in ~6 seconds.
+
+### Fallback: Editing Local JSON Files
+
+If the API is unreachable, the site falls back to the JSON files in `data/`. Edit these through GitHub.dev (press `.` on the repository page) and commit to `main`:
+
+```jsonc
+// data/products.json
+[
+  {
+    "id": 1,
+    "name": "Mountain Vista",
+    "slug": "mountain-vista",
+    "category": "landscapes",
+    "price": 12999,
+    "description": "...",
+    "image": "images/optimized/landscapes_1.jpg"
+  }
+]
+```
 
 ---
 
-<p align="center">
-  <sub>Built with 🪴 by <a href="https://github.com/pankajjjat">Pankaj</a> for <strong>MITTI (मिट्टी)</strong> — founded by Saumya · © 2024–2026</sub>
-</p>
+## Setup Guide
+
+### 1. Deploy the Google Apps Script API
+
+Full instructions: [`google-apps-script/DEPLOY.md`](google-apps-script/DEPLOY.md)
+
+1. Create a new Google Sheet at [sheets.new](https://sheets.new)
+2. Open **Extensions → Apps Script**
+3. Paste the contents of [`google-apps-script/code.gs`](google-apps-script/code.gs)
+4. Run the `createAllSheets()` function to auto-generate the 9 sheet tabs with sample data
+5. Click **Deploy → New deployment → Web app** (set "Execute as: Me", "Who has access: Anyone")
+6. Copy the deployment URL
+7. Update `API_BASE` in `js/api.js` with the new URL
+
+### 2. Deploy the Frontend
+
+1. Push to the `main` branch of your GitHub repository
+2. Enable **GitHub Pages** in the repository settings (Source: `main`, folder: `/`)
+3. The `.github/workflows/deploy.yml` action handles auto-deployment
+4. Your site is live at `https://<username>.github.io/<repository>/`
+
+---
+
+## API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `?action=artworks` | All products with prices, categories, stock |
+| `?action=categories` | Shop categories and metadata |
+| `?action=testimonials` | Customer reviews |
+| `?action=faq` | FAQ entries |
+| `?action=content` | Site text and settings (key-value) |
+| `?action=blog` | Blog posts |
+| `?action=images` | Image URL manager |
+| `?action=stats` | Shop statistics (counts per category, totals) |
+| `?action=all` | All data in a single response |
+
+---
+
+## Performance
+
+- **No frameworks** — vanilla JavaScript, zero dependencies
+- **Lazy loading** — all images use `loading="lazy"`
+- **SessionStorage cache** — API responses cached for 5 minutes to reduce network calls
+- **Image fallback chain** — JPG → SVG → gradient, ensuring no broken images
+- **Minimal CSS** — single stylesheet (~700 lines), no unused rules
+- **GitHub Actions** — continuous deployment on every push
+
+---
+
+## Color System
+
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--deep-earth` | `#1A1612` | Backgrounds, footer |
+| `--dark-clay` | `#3A3028` | Cards, nav |
+| `--raw-earth` | `#5A4A3A` | Borders, muted text |
+| `--terracotta` | `#8A4A30` | Accents, links |
+| `--warm-clay` | `#C2623E` | Primary brand colour |
+| `--golden-amber` | `#C4883A` | Highlights |
+| `--cream` | `#F2EBE0` | Text on dark backgrounds |
+
+---
+
+## License
+
+© 2024–2026 MITTI (मिट्टी) — founded by Saumya. All rights reserved.
+
+Built by [Pankaj](https://github.com/pankajjjat).
