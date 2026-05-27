@@ -6,7 +6,7 @@ backend:
   name: github
   repo: pankajjjat/Art
   branch: main
-  base_url: https://oauth.decapcms.dev
+  auth_type: github-device
 
 media_folder: "images/optimized"
 public_folder: "images/optimized"
