@@ -1619,3 +1619,118 @@ a:hover { color: var(--ochre); }
     height: 160px;
   }
 }
+
+/* ===== FAQ Accordion (CMS-powered) ===== */
+.faq-accordion {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--clay-mid-light, #5A4A3A);
+  padding: 0;
+}
+
+.faq-question {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 0;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--text-on-dark);
+  transition: color var(--transition);
+  user-select: none;
+}
+
+.faq-question:hover {
+  color: var(--terracotta, #C2623E);
+}
+
+.faq-icon {
+  font-size: 1.3rem;
+  color: var(--text-muted);
+  transition: transform var(--transition);
+}
+
+.faq-item.open .faq-icon {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s cubic-bezier(0.22, 1, 0.36, 1), padding 0.35s ease;
+  color: var(--text-muted);
+  line-height: 1.7;
+  font-size: 0.92rem;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+  padding-bottom: 1.2rem;
+}
+
+/* ===== Testimonials ===== */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.testimonial-card {
+  background: var(--clay-mid, #3A3028);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid var(--clay-mid-light, #5A4A3A);
+}
+
+.testimonial-stars {
+  color: var(--ochre, #C4883A);
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  letter-spacing: 2px;
+}
+
+.testimonial-text {
+  font-style: italic;
+  color: var(--text-on-dark);
+  line-height: 1.6;
+  font-size: 0.92rem;
+  margin-bottom: 1rem;
+}
+
+.testimonial-author {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* ===== Static page layout ===== */
+.static-page {
+  max-width: var(--max-width, 1280px);
+  margin: 0 auto;
+  padding: 6rem 1.5rem 3rem;
+}
+
+.static-page h1 {
+  font-family: var(--font-serif, serif);
+  font-size: 2.2rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.blog-back {
+  display: inline-block;
+  margin-top: 2rem;
+  color: var(--terracotta, #C2623E);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color var(--transition);
+}
+
+.blog-back:hover {
+  color: var(--ochre, #C4883A);
+}

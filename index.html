@@ -158,6 +158,15 @@
     </div>
   </section>
 
+  <!-- Testimonials (CMS-powered) -->
+  <section class="section testimonials-section" id="testimonials">
+    <div class="container">
+      <h2 class="section-title">What collectors say</h2>
+      <p class="section-subtitle">Real words from real people who've brought MITTI home</p>
+      <div class="testimonials-grid" id="testimonialContainer"></div>
+    </div>
+  </section>
+
   <!-- About -->
   <section class="section" id="about">
     <div class="container">
@@ -360,8 +369,10 @@
   <!-- Toast -->
   <div class="toast" id="toast"></div>
 
-  <!-- Scripts -->
-  <script src="js/products.js"></script>
+  <!-- CMS: Google Sheets-powered data layer -->
+  <script src="js/api.js"></script>
+  <script src="js/cms.js"></script>
+  <!-- UI Layer (lightbox, cart, effects) -->
   <script src="js/main.js"></script>
 </body>
 </html>

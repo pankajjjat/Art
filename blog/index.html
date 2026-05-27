@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MITTI Blog &mdash; Art Stories, Guides &amp; Inspiration | MITTI Art Gallery</title>
-  <meta name="description" content="Explore the MITTI art blog &mdash; stories about lippan art, Indian handicrafts, home decor ideas, and the artists behind the work." />
+  <title>MITTI Blog — Art Stories, Guides &amp; Inspiration | MITTI Art Gallery</title>
+  <meta name="description" content="Explore the MITTI art blog — stories about lippan art, Indian handicrafts, home decor ideas, and the artists behind the work." />
   <link rel="canonical" href="https://pankajjjat.github.io/Art/blog/" />
-  <meta property="og:title" content="MITTI Blog &mdash; Art Stories, Guides &amp; Inspiration" />
-  <meta property="og:description" content="Explore the MITTI art blog &mdash; stories about lippan art, Indian handicrafts, and home decor ideas." />
+  <meta property="og:title" content="MITTI Blog — Art Stories, Guides &amp; Inspiration" />
+  <meta property="og:description" content="Explore the MITTI art blog — stories about lippan art, Indian handicrafts, and home decor ideas." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://pankajjjat.github.io/Art/blog/" />
-  <script type="application/ld+json">
+  <script type="application/ld+json" id="ldJson">
   {
     "@context": "https://schema.org",
     "@type": "Blog",
@@ -25,7 +25,7 @@
 <body>
   <nav id="navbar">
     <div class="nav-inner">
-      <a href="../" class="logo">MI<span>TTI</span><span class="logo-tagline">Earth &middot; Art &middot; Belonging</span></a>
+      <a href="../" class="logo">MI<span>TTI</span><span class="logo-tagline">Earth · Art · Belonging</span></a>
       <button id="hamburger"><span></span><span></span><span></span></button>
       <ul class="nav-links">
         <li><a href="../#gallery" class="nav-link">Gallery</a></li>
@@ -57,7 +57,9 @@
   </footer>
 
   <div class="toast" id="toast"></div>
-  <script src="../js/products.js"></script>
+  <!-- CMS: Google Sheets-powered data layer -->
+  <script src="../js/api.js"></script>
+  <script src="../js/cms.js"></script>
   <script src="../js/main.js"></script>
 </body>
 </html>

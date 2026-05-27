@@ -1,38 +1,36 @@
-name: Build & Deploy MITTI
+name: Deploy MITTI (CMS mode)
 
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          python-version: '3.11'
+          path: '.'
 
-      - name: Generate static pages
-        run: python scripts/generate-pages-fixed.py
-
-      - name: Commit generated files
-        run: |
-          git config --local user.name "MITTI Bot"
-          git config --local user.email "bot@mittiart.com"
-          git add -A
-          git diff --staged --quiet || git commit -m "Auto-build: regenerate site from data files"
-
-      - name: Push changes
-        uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

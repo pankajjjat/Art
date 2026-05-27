@@ -8,9 +8,9 @@
 <p align="center">
   <a href="https://pankajjjat.github.io/Art/">🌍 Live Site</a> •
   <a href="#-features">Features</a> •
-  <a href="#-products">Gallery</a> •
-  <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-editing-content">Editing</a>
+  <a href="#%EF%B8%8F-architecture">Architecture</a> •
+  <a href="#%EF%B8%8F-managing-content">Managing Content</a> •
+  <a href="#-google-sheets-setup">Setup</a>
 </p>
 
 <br>
@@ -35,11 +35,124 @@ The name **MITTI** means *soil* — a reminder that every painting begins with c
 
 | | |
 |---|---|
-| 🖼️ **38 Static Pages** — fully generated, zero runtime dependencies | 📱 **Responsive Design** — works on mobile, tablet, desktop |
-| 🎨 **Custom Art Cursor** — grain texture with earth-palette trail | 🔮 **Image Fallback Chain** — JPG → SVG → gradient placeholder |
-| 🛒 **13 Products** with pricing, dimensions, stock status | 📰 **5 Blog Posts** on Lippan art, decor, and gifting |
-| 📍 **Schema.org JSON-LD** on every page (ArtGallery + ItemList) | 🐦 **Open Graph / Twitter Cards** for social sharing |
-| ⚡ **GitHub Actions Auto-Build** — edit JSON, push, deploy | 🎯 **Bespoke Earth Palette** — no template generics |
+| 🗄️ **Google Sheets CMS** — manage products, blogs, FAQs from phone | 📱 **Zero-cost** — Google Apps Script + GitHub Pages + Sheets |
+| 🖼️ **Dynamic Gallery** — search, filter by category, featured pieces | 🎨 **Custom Art Cursor** — grain texture with earth-palette trail |
+| 🛒 **Cart + UPI Checkout** — localStorage cart, UPI payment modal | 📰 **Blog** — CMS-managed posts, auto-rendered |
+| 📍 **Dynamic JSON-LD** — schema.org ArtGallery markup auto-generated | 🐦 **Open Graph / Twitter Cards** for social sharing |
+| 🔮 **Image Fallback Chain** — JPG → SVG → gradient placeholder | ⚡ **Lightweight** — vanilla JS, no frameworks |
+
+---
+
+## 🏗️ Architecture
+
+```
+┌──────────────────────┐
+│   Google Sheet       │  ← Edit on phone or laptop
+│   (8 tabs)           │
+└─────────┬────────────┘
+          │ Google Apps Script
+          ▼ JSON API
+┌──────────────────────┐
+│   api.js             │  ← Fetch layer with sessionStorage cache
+│   cms.js             │  ← Render engine (gallery, blog, FAQ, etc.)
+│   main.js            │  ← UI layer (lightbox, cart, cursor)
+└─────────┬────────────┘
+          │
+          ▼
+┌──────────────────────┐
+│   GitHub Pages       │
+│   (static HTML/JS)   │
+└──────────────────────┘
+```
+
+**Stack:** Google Sheets · Google Apps Script · Vanilla JS · GitHub Pages
+
+### Data Flow
+
+1. You update the **Google Sheet** (or use local JSON fallback files in `/data/`)
+2. Apps Script serves data via `?action=artworks|categories|testimonials|faq|content|blog`
+3. `api.js` fetches, caches in sessionStorage (5 min), falls back to local JSON if offline
+4. `cms.js` renders all sections dynamically: gallery grid, category cards, featured, blog, FAQ accordion, testimonials, SEO tags
+5. `main.js` handles UI: lightbox, cart, navigation, cursor effects, parallax
+
+---
+
+## 🗄️ Managing Content
+
+### From Phone (Once API is deployed)
+
+Everything is managed from **one Google Sheet** with these tabs:
+
+| Tab | What it controls |
+|-----|-----------------|
+| **Artworks** | Add/edit/remove products — title, price, category, image, stock |
+| **Categories** | Shop categories (Landscapes, Abstract, Lippan Art, etc.) |
+| **Testimonials** | Customer reviews that appear on the homepage |
+| **FAQs** | Accordion Q&A on the FAQ page |
+| **Website_Content** | Site text: hero title, about story, contact info, social links |
+| **Blog_Posts** | Add/edit blog posts — title, excerpt, body HTML, publish date |
+| **Orders** | Orders placed through the site (auto-populated via contact form) |
+| **Image_Manager** | Map artwork titles to image URLs (for future CDN migration) |
+
+**No GitHub commits needed** — changes appear on your site within seconds (first load may cold-start ~6s).
+
+### From Browser (GitHub.dev — Fallback)
+
+If the API is unreachable, the site falls back to local JSON files:
+
+```
+data/
+├── settings.json        ← Site name, tagline, social links
+├── products.json        ← All 13 products
+├── categories.json      ← 5 categories
+├── testimonials.json    ← Customer reviews
+├── faq.json             ← FAQ Q&A
+└── blog.json            ← Blog posts
+```
+
+1. Open [github.com/pankajjjat/Art](https://github.com/pankajjjat/Art)
+2. Press **`.` (dot key)** — VS Code in browser
+3. Edit the JSON files → commit to `main`
+4. ✅ GitHub Pages auto-deploys in ~30 seconds
+
+---
+
+## 🛠️ Google Sheets Setup
+
+### Step 1: Create the Sheet & Deploy the API
+
+Full instructions in **`google-apps-script/DEPLOY.md`** — but the TL;DR:
+
+1. Go to [sheets.new](https://sheets.new), rename to **MITTI CMS**
+2. **Extensions → Apps Script** → paste `google-apps-script/code.gs`
+3. Run `createAllSheets()` to auto-generate all 8 tabs with sample data
+4. **Deploy → New deployment → Web app** (Anyone can access)
+5. Copy the URL → paste into `js/api.js` as `API_BASE`
+
+### Step 2: Update Your Site from Anywhere
+
+| Task | How |
+|------|-----|
+| **Add a product** | New row in Artworks sheet |
+| **Change price** | Edit the price cell |
+| **Add a blog post** | New row in Blog_Posts with title, slug, excerpt, content |
+| **Update FAQ** | Edit/Add rows in FAQs sheet |
+| **Change site tagline** | Edit Website_Content sheet |
+| **Mark sold** | Set inStock to FALSE in Artworks |
+
+### API Endpoints
+
+```
+GET ?action=artworks       → All products
+GET ?action=categories     → Shop categories
+GET ?action=testimonials   → Customer reviews
+GET ?action=faq            → FAQ entries
+GET ?action=content        → Site text (key-value map)
+GET ?action=blog           → Blog posts
+GET ?action=images         → Image URL manager
+GET ?action=stats          → Shop statistics
+GET ?action=all            → Everything in one call
+```
 
 ---
 
@@ -57,94 +170,36 @@ The name **MITTI** means *soil* — a reminder that every painting begins with c
 
 ---
 
-## 🖼️ Products
-
-<p align="center">
-  <img src="images/optimized/landscapes_1.jpg" width="18%" style="border-radius:8px">
-  <img src="images/optimized/landscapes_5.jpg" width="18%" style="border-radius:8px">
-  <img src="images/optimized/abstract_7.jpg" width="18%" style="border-radius:8px">
-  <img src="images/optimized/lippan-art_10.jpg" width="18%" style="border-radius:8px">
-  <img src="images/optimized/abstract_11.jpg" width="18%" style="border-radius:8px">
-</p>
-
-| Category | Products | Price Range |
-|---|---|---|
-| 🏔️ **Landscapes** | Mountain Vista, Midnight Solitude, Forest Canopy, Golden Pastoral | ₹8,999 – ₹12,999 |
-| 🌀 **Abstract** | Ethereal Mist, Earthen Flow, Textured Rhythms | ₹9,999 – ₹14,999 |
-| ✨ **Lippan Art** | Mirror Mandala, Geometric Radiance, Ornate Opulence | ₹7,999 – ₹15,999 |
-| 🌆 **Contemporary** | Urban Layers, Modern Symmetry | ₹9,999 – ₹11,999 |
-| 🌟 **Featured** | Golden Cascade | ₹13,999 |
-
----
-
-## 🛠️ Tech Stack
+## 📁 File Structure
 
 ```
-┌─────────────┐    ┌──────────────┐    ┌──────────────┐
-│  settings   │    │  products    │    │    blog      │
-│  .json      │───▶│  .json      │───▶│   .json      │
-└─────────────┘    └──────────────┘    └──────────────┘
-       │                  │                   │
-       ▼                  ▼                   ▼
-┌─────────────────────────────────────────────────┐
-│         generate-pages-fixed.py                  │
-│  (Python generator — single source of truth)     │
-└─────────────────────┬───────────────────────────┘
-                      ▼
-        ┌─────────────────────────┐
-        │  index.html             │
-        │  product/<slug>/        │
-        │  blog/                  │
-        │  faq/ | shipping/       │
-        │  payment/               │
-        │  css/ | js/             │
-        └──────────┬──────────────┘
-                   ▼
-        ┌─────────────────────────┐
-        │  GitHub Actions         │
-        │  → auto-commit + push   │
-        └──────────┬──────────────┘
-                   ▼
-        ┌─────────────────────────┐
-        │  GitHub Pages           │
-        │  https://pankajjjat     │
-        │  .github.io/Art/        │
-        └─────────────────────────┘
+mitti-website/
+├── index.html                ← Home page (CMS-driven)
+├── css/
+│   └── style.css             ← All styles (FAQ + testimonial styles added)
+├── js/
+│   ├── api.js                ← Data fetch layer + sessionStorage cache
+│   ├── cms.js                ← Render engine (gallery, blog, FAQ, SEO)
+│   └── main.js               ← UI (lightbox, cart, cursor, effects)
+├── data/
+│   ├── products.json         ← Local fallback (API unavailable)
+│   ├── categories.json
+│   ├── testimonials.json
+│   ├── faq.json
+│   ├── blog.json
+│   └── settings.json
+├── google-apps-script/
+│   ├── code.gs               ← Complete Apps Script backend
+│   └── DEPLOY.md             ← Full setup guide
+├── images/
+│   ├── optimized/            ← 34 JPG product photos
+│   └── svg/                  ← 37 SVG fallbacks
+├── blog/                     ← Blog index (CMS-driven)
+├── faq/                      ← FAQ page (CMS-driven accordion)
+├── shipping/                 ← Static shipping info
+├── payment/                  ← Static payment info
+└── .github/workflows/        ← GitHub Actions deploy
 ```
-
-**Stack:** Python 3 · Vanilla HTML/CSS/JS · JSON data layer · JPG/SVG images · GitHub Pages + Actions
-
----
-
-## ✏️ Editing Content
-
-No CMS. No database. **Just JSON files and a push.**
-
-```
-data/
-├── settings.json    ← Social links, site name, tagline, contact info
-├── products.json    ← All 13 products: name, price, dimensions, stock
-└── blog.json        ← Blog posts with markdown body content
-```
-
-**To update:**
-
-1. Open [github.com/pankajjjat/Art](https://github.com/pankajjjat/Art)
-2. Press **`.` (dot key)** — launches VS Code in your browser instantly
-3. Edit the JSON file you want to change (e.g. update Instagram URL in `settings.json`)
-4. Commit to `main`
-5. ✅ **GitHub Actions** auto-generates all HTML pages and deploys in ~30 seconds
-
-> No CLI, no local setup, no login flow. Browser-only.
-
-### Quick Edits
-
-| Change | File | Field |
-|---|---|---|
-| Instagram / Facebook link | `data/settings.json` | `social.instagram`, `social.facebook` |
-| Product price or stock | `data/products.json` | `price`, `inStock` |
-| Add a blog post | `data/blog.json` | New object in array |
-| Site tagline | `data/settings.json` | `tagline` |
 
 ---
 
@@ -160,5 +215,5 @@ data/
 ---
 
 <p align="center">
-  <sub>Built with 🪴 by <a href="https://github.com/pankajjjat">Pankaj</a> for <strong>MITTI (मिट्टी)</strong> — founded by Saumya · © 2024–2025</sub>
+  <sub>Built with 🪴 by <a href="https://github.com/pankajjjat">Pankaj</a> for <strong>MITTI (मिट्टी)</strong> — founded by Saumya · © 2024–2026</sub>
 </p>

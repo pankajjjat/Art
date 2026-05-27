@@ -1,26 +1,19 @@
 /* ===================================================================
    MITTI (मिट्टी) — Earth. Art. Belonging.
-   DOM-based image loading — FIXES the errors from old projects:
-   ✓ No inline onerror in template literals
-   ✓ No outerHTML stripping event handlers
-   ✓ Proper JPG → SVG → gradient fallback chain
+   UI Layer — lightbox, cart, navigation, cursor, effects.
+   Data comes from MITTI_API (Google Sheets CMS).
+   CMS rendering from MITTI_CMS.
    =================================================================== */
 (function() {
   'use strict';
 
-  const allProducts = typeof products !== 'undefined' ? products : [];
-  const allCategories = typeof categories !== 'undefined' ? categories : [];
-  const allBlogPosts = typeof blogPosts !== 'undefined' ? blogPosts : [];
-
   // ----- Helpers -----
-  function formatPrice(r) { return '\u20B9' + Number(r).toLocaleString('en-IN', { minimumFractionDigits: 0 }); }
+  function formatPrice(r) { return '₹' + Number(r).toLocaleString('en-IN', { minimumFractionDigits: 0 }); }
 
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => document.querySelectorAll(s);
 
-  // ===== DOM-BASED IMAGE LOADER (fixes the outerHTML bug) =====
-  // Creates an img element and attaches onerror via DOM — NOT inline HTML attributes
-  // This guarantees the fallback chain actually works
+  // ===== DOM-BASED IMAGE LOADER (kept from original — no outerHTML bug) =====
   function getCategoryGradient(cat) {
     const gradients = {
       'landscapes': 'linear-gradient(135deg, #1a3a2a, #0a1a10)',
@@ -43,32 +36,29 @@
     return icons[cat] || '\u25C6';
   }
 
-  // THE KEY FIX: Create a DOM element with attached onerror handler
-  // This never uses outerHTML, so the event handler survives rendering
   function createArtImage(product, className) {
     const img = document.createElement('img');
     img.className = className || '';
-    img.alt = product.name + ' \u2014 ' + product.category.replace('-', ' ') + ' by MITTI';
+    img.alt = (product.title || product.name) + ' — ' + (product.cat_clean || product.category || '').replace('-', ' ') + ' by MITTI';
     img.loading = 'lazy';
 
-    // JPG primary — real photo renders first
-    img.src = product.image;
+    const imgSrc = product.image
+      ? (product.image.startsWith('http') ? product.image : 'images/optimized/' + product.image)
+      : '';
+    const svgSrc = product.svg
+      ? (product.svg.startsWith('http') ? product.svg : 'images/svg/' + product.svg)
+      : '';
 
-    // Store fallback chain on the element itself (not data attributes)
+    img.src = imgSrc;
+
     let fallbackIndex = 0;
-    const fallbacks = [
-      product.image,              // 0: JPG (primary)
-      product.imageFallback || '', // 1: SVG (fallback)
-      null                        // 2: gradient placeholder (signal to show gradient)
-    ];
+    const fallbacks = [imgSrc, svgSrc, null];
 
     img.onerror = function() {
       fallbackIndex++;
       if (fallbackIndex === 1 && fallbacks[1]) {
-        // First fallback: try SVG
         this.src = fallbacks[1];
       } else {
-        // Ultimate fallback: show category gradient with icon
         this.style.display = 'none';
         const parent = this.parentNode;
         if (parent) {
@@ -83,7 +73,7 @@
             '<div style="font-size:2.4rem;margin-bottom:8px;opacity:0.6;">' +
             getCategoryIcon(product.category) + '</div>' +
             '<div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;opacity:0.5;">' +
-            product.name + '</div>';
+            (product.title || product.name) + '</div>';
           parent.appendChild(fallbackEl);
         }
       }
@@ -91,197 +81,11 @@
     return img;
   }
 
-  // ===== Render Categories =====
-  function renderCategories() {
-    const grid = $('#catGrid');
-    if (!grid) return;
-
-    grid.innerHTML = allCategories.map(cat => {
-      const img = createArtImage({
-        name: cat.name,
-        category: cat.id,
-        image: cat.image,
-        imageFallback: ''
-      }, 'cat-card-img');
-      return '<div class="cat-card" data-category="' + cat.id + '" onclick="filterGallery(\'' + cat.id + '\')">' +
-        img.outerHTML +
-        '<div class="cat-card-overlay">' +
-          '<div class="cat-card-title">' + cat.name + '</div>' +
-          '<div class="cat-card-count">' + cat.count + ' ' + (cat.count === 1 ? 'piece' : 'pieces') + '</div>' +
-        '</div></div>';
-    }).join('');
-
-    // Re-attach onerror to category images (outerHTML strips them)
-    grid.querySelectorAll('.cat-card-img').forEach(function(img) {
-      const cat = allCategories.find(function(c) { return img.closest('[data-category]') && img.closest('[data-category]').dataset.category === c.id; });
-      if (!cat) return;
-      img.onerror = function() {
-        this.style.display = 'none';
-        const parent = this.parentNode;
-        if (parent) {
-          parent.style.background = getCategoryGradient(cat.id);
-          parent.style.minHeight = '200px';
-        }
-      };
-    });
-  }
-
-  // ===== Render Gallery (DOM-based — FIXES the outerHTML bug) =====
-  let activeFilter = 'all';
-
-  function renderGallery(filter) {
-    const grid = $('#galleryGrid');
-    if (!grid) return;
-
-    activeFilter = filter || 'all';
-    const filtered = activeFilter === 'all'
-      ? allProducts
-      : allProducts.filter(function(p) { return p.category === activeFilter; });
-
-    // Update filter buttons
-    $$('.filter-btn').forEach(function(btn) {
-      btn.classList.toggle('active', btn.dataset.filter === activeFilter);
-    });
-
-    // Clear grid — build with DOM, not innerHTML
-    grid.innerHTML = '';
-
-    filtered.forEach(function(product, i) {
-      const card = document.createElement('div');
-      card.className = 'gallery-card' + (product.featured ? ' featured' : '') + (i === 0 ? ' visible' : '');
-      card.onclick = function() { openLightboxBySlug(product.slug); };
-
-      // Image container
-      const imgWrap = document.createElement('div');
-      imgWrap.className = 'gallery-card-image';
-
-      // Use createArtImage to get proper DOM-based fallback (FIX #1: no outerHTML stripping)
-      const img = createArtImage(product, 'gallery-img');
-      imgWrap.appendChild(img);
-
-      // Info overlay
-      const info = document.createElement('div');
-      info.className = 'gallery-card-info';
-      info.innerHTML =
-        '<div class="gallery-card-category">' + product.category.replace('-', ' ') + '</div>' +
-        '<div class="gallery-card-name">' + product.name + '</div>' +
-        '<div class="gallery-card-price">' + formatPrice(product.price) + '</div>' +
-        (product.inStock === false ? '<div class="gallery-card-stock">Out of Stock</div>' : '');
-
-      // Grey out the card if out of stock
-      if (product.inStock === false) {
-        card.style.opacity = '0.65';
-        imgWrap.style.filter = 'grayscale(0.7)';
-      }
-
-      card.appendChild(imgWrap);
-      card.appendChild(info);
-      grid.appendChild(card);
-
-      // Stagger animation
-      setTimeout(function() {
-        card.classList.add('visible');
-      }, i * 60);
-    });
-  }
-
-  // ===== Filter Gallery =====
-  window.filterGallery = function(category) {
-    renderGallery(category);
-    var gallery = $('#gallery');
-    if (gallery) gallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  // ===== Render Filter Bar =====
-  function renderFilters() {
-    var bar = $('#filterBar');
-    if (!bar) return;
-
-    var html = '<button class="filter-btn active" data-filter="all" onclick="filterGallery(\'all\')">All (' + allProducts.length + ')</button>';
-    allCategories.forEach(function(cat) {
-      html += '<button class="filter-btn" data-filter="' + cat.id + '" onclick="filterGallery(\'' + cat.id + '\')">' + cat.name + ' (' + cat.count + ')</button>';
-    });
-    bar.innerHTML = html;
-  }
-
-  // ===== Render Featured =====
-  function renderFeatured() {
-    var grid = $('#featuredGrid');
-    if (!grid) return;
-
-    var featured = allProducts.filter(function(p) { return p.featured; });
-    grid.innerHTML = '';
-
-    featured.forEach(function(product) {
-      var card = document.createElement('div');
-      card.className = 'featured-card';
-      card.onclick = function() { openLightboxBySlug(product.slug); };
-
-      var imgWrap = document.createElement('div');
-      imgWrap.className = 'featured-card-image';
-      var img = createArtImage(product, '');
-      imgWrap.appendChild(img);
-
-      var info = document.createElement('div');
-      info.className = 'featured-card-info';
-      info.innerHTML =
-        '<div class="featured-card-tag">Featured</div>' +
-        '<div class="featured-card-name">' + product.name + '</div>' +
-        '<div class="featured-card-price">' + formatPrice(product.price) + '</div>';
-
-      card.appendChild(imgWrap);
-      card.appendChild(info);
-      grid.appendChild(card);
-    });
-  }
-
-  // ===== Render Blog =====
-  function renderBlog() {
-    var grid = $('#blogGrid');
-    if (!grid) return;
-
-    grid.innerHTML = '';
-    allBlogPosts.forEach(function(post) {
-      var article = document.createElement('article');
-      article.className = 'blog-card';
-
-      var link = document.createElement('a');
-      link.href = post.url;
-      link.className = 'blog-card-image';
-
-      // Blog images also use proper DOM-based fallback
-      var img = document.createElement('img');
-      img.src = post.image;
-      img.alt = post.title;
-      img.loading = 'lazy';
-      // Simple fallback for blog images
-      img.onerror = function() {
-        var fb = post.imageFallback;
-        if (fb && this.src !== fb) { this.src = fb; }
-        else { this.style.display = 'none'; }
-      };
-
-      link.appendChild(img);
-
-      var body = document.createElement('div');
-      body.className = 'blog-card-body';
-      body.innerHTML =
-        '<div class="blog-card-date">' + post.date + ' \u00B7 ' + post.readTime + ' min read</div>' +
-        '<h3 class="blog-card-title"><a href="' + post.url + '">' + post.title + '</a></h3>' +
-        '<p class="blog-card-excerpt">' + post.excerpt + '</p>' +
-        '<a href="' + post.url + '" class="blog-card-link">Read more \u2192</a>';
-
-      article.appendChild(link);
-      article.appendChild(body);
-      grid.appendChild(article);
-    });
-  }
-
-  // ===== Lightbox (also uses DOM-based fallback) =====
+  // ===== Lightbox =====
   var currentProduct = null;
 
   window.openLightboxBySlug = function(slug) {
-    var product = allProducts.find(function(p) { return p.slug === slug; });
+    var product = MITTI_API.getBySlug(slug);
     if (product) openLightbox(product);
   };
 
@@ -290,18 +94,25 @@
     var lb = $('#lightbox');
     if (!lb) return;
 
-    // Lightbox image with DOM-based fallback
     var lbContainer = $('#lbImgContainer');
     if (lbContainer) {
       lbContainer.innerHTML = '';
       var img = document.createElement('img');
       img.id = 'lbImg';
-      img.src = product.image;
-      img.alt = product.name;
+
+      var imgSrc = product.image
+        ? (product.image.startsWith('http') ? product.image : 'images/optimized/' + product.image)
+        : '';
+      var svgSrc = product.svg
+        ? (product.svg.startsWith('http') ? product.svg : 'images/svg/' + product.svg)
+        : '';
+
+      img.src = imgSrc;
+      img.alt = product.title || product.name;
       img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
 
       var fbIdx = 0;
-      var fbSources = [product.image, product.imageFallback || '', null];
+      var fbSources = [imgSrc, svgSrc, null];
       img.onerror = function() {
         fbIdx++;
         if (fbIdx === 1 && fbSources[1]) {
@@ -316,21 +127,22 @@
             lbContainer.innerHTML =
               '<div style="text-align:center;color:rgba(242,235,224,0.5);padding:40px;">' +
               '<div style="font-size:4rem;margin-bottom:12px;opacity:0.6;">' + getCategoryIcon(product.category) + '</div>' +
-              '<div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;opacity:0.5;">' + product.name + '</div></div>';
+              '<div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;opacity:0.5;">' + (product.title || product.name) + '</div></div>';
           }
         }
       };
       lbContainer.appendChild(img);
     }
 
-    $('#lbCategory').textContent = product.category.replace('-', ' ');
-    $('#lbTitle').textContent = product.name;
+    $('#lbCategory').textContent = (product.cat_clean || product.category || '').replace('-', ' ');
+    $('#lbTitle').textContent = product.title || product.name;
     $('#lbPrice').textContent = formatPrice(product.price);
-    $('#lbDimensions').textContent = product.dimensions;
-    $('#lbDescription').textContent = product.description;
+    $('#lbDimensions').textContent = product.dimensions || '';
+    $('#lbDescription').textContent = product.description || '';
+
     var lbAddBtn = $('#lbAddBtn');
     if (lbAddBtn) {
-      if (product.inStock === false) {
+      if (product.inStock === false || product.inStock === 'FALSE') {
         lbAddBtn.textContent = 'Currently Unavailable';
         lbAddBtn.disabled = true;
         lbAddBtn.style.opacity = '0.5';
@@ -348,7 +160,7 @@
     lb.classList.add('open');
     document.body.style.overflow = 'hidden';
     history.replaceState(null, '', '#product-' + product.slug);
-    document.title = product.name + ' \u2014 MITTI Art Gallery';
+    document.title = (product.title || product.name) + ' — MITTI Art Gallery';
   }
 
   window.closeLightbox = function() {
@@ -357,7 +169,7 @@
     lb.classList.remove('open');
     document.body.style.overflow = '';
     history.replaceState(null, '', window.location.pathname);
-    document.title = 'MITTI \u2014 Earth. Art. Belonging. | Original Indian Art Gallery';
+    document.title = 'MITTI — Earth. Art. Belonging. | Original Indian Art Gallery';
   };
 
   // Close lightbox on overlay click
@@ -376,6 +188,7 @@
 
   function navigateLightbox(dir) {
     if (!currentProduct) return;
+    var allProducts = MITTI_API.artworks;
     var idx = allProducts.indexOf(currentProduct);
     if (idx === -1) return;
     var next = (idx + dir + allProducts.length) % allProducts.length;
@@ -387,7 +200,7 @@
     var hash = location.hash.replace('#', '');
     var match = hash.match(/^product-(.+)$/);
     if (match) {
-      var product = allProducts.find(function(p) { return p.slug === match[1]; });
+      var product = MITTI_API.getBySlug(match[1]);
       if (product) setTimeout(function() { openLightbox(product); }, 200);
     }
   }
@@ -405,13 +218,13 @@
 
     if (cart.length === 0) {
       items.innerHTML = '<div class="cart-empty">Your collection is empty</div>';
-      if ($('#cartTotal')) $('#cartTotal').textContent = '\u20B90';
+      if ($('#cartTotal')) $('#cartTotal').textContent = '₹0';
       return;
     }
 
     items.innerHTML = cart.map(function(item, i) {
       return '<div class="cart-item">' +
-        '<div class="cart-item-img"><img src="' + item.image + '" alt="' + item.name + '" loading="lazy" onerror="this.style.display=\'none\'" /></div>' +
+        '<div class="cart-item-img"><img src="' + (item.image || '') + '" alt="' + item.name + '" loading="lazy" onerror="this.style.display=\'none\'" /></div>' +
         '<div class="cart-item-info">' +
           '<div class="cart-item-name">' + item.name + '</div>' +
           '<div class="cart-item-price">' + formatPrice(item.price) + '</div>' +
@@ -425,14 +238,17 @@
   }
 
   window.addToCart = function(product) {
-    if (product.inStock === false) {
+    if (product.inStock === false || product.inStock === 'FALSE') {
       showToast('This piece is currently unavailable');
       return;
     }
-    cart.push({ id: product.id, name: product.name, price: product.price, image: product.imageFallback || product.image });
+    var imgSrc = product.image
+      ? (product.image.startsWith('http') ? product.image : 'images/optimized/' + product.image)
+      : '';
+    cart.push({ id: product.id, name: product.title || product.name, price: product.price, image: imgSrc });
     localStorage.setItem('mitti-cart', JSON.stringify(cart));
     updateCartUI();
-    showToast(product.name + ' added to your collection');
+    showToast((product.title || product.name) + ' added to your collection');
   };
 
   window.removeFromCart = function(index) {
@@ -552,30 +368,6 @@
     });
   }
 
-  // ===== Hero Carousel =====
-  function initHeroCarousel() {
-    var heroImg = $('#heroImg');
-    if (!heroImg) return;
-    var featured = allProducts.filter(function(p) { return p.featured; });
-    if (featured.length < 2) return;
-
-    var idx = 0;
-    setInterval(function() {
-      idx = (idx + 1) % featured.length;
-      heroImg.style.opacity = '0';
-      heroImg.onerror = null; // clear prior onerror
-      setTimeout(function() {
-        heroImg.src = featured[idx].image;
-        heroImg.onerror = function() {
-          if (featured[idx].imageFallback && this.src !== featured[idx].imageFallback) {
-            this.src = featured[idx].imageFallback;
-          }
-        };
-        heroImg.style.opacity = '1';
-      }, 600);
-    }, 5000);
-  }
-
   // ===== Parallax Hero =====
   function initParallax() {
     var heroBg = $('#heroBg');
@@ -612,28 +404,30 @@
 
   // ===== Init =====
   document.addEventListener('DOMContentLoaded', function() {
-    renderCategories();
-    renderFilters();
-    renderGallery('all');
-    renderFeatured();
-    renderBlog();
-    updateCartUI();
-    initNav();
-    initContactForm();
-    initCursor();
-    initHeroCarousel();
-    initParallax();
-    initScrollReveal();
-    checkHash();
+    // Step 1: Load data from Google Sheets API (with fallback to local JSON)
+    MITTI_API.loadAll().then(function() {
+      // Step 2: Render all CMS-driven sections
+      if (typeof MITTI_CMS !== 'undefined') {
+        MITTI_CMS.init();
+      }
+      // Step 3: UI init
+      updateCartUI();
+      initNav();
+      initContactForm();
+      initCursor();
+      initParallax();
+      initScrollReveal();
+      checkHash();
 
-    var cartBtn = $('#cartBtn');
-    if (cartBtn) cartBtn.addEventListener('click', toggleCart);
+      var cartBtn = $('#cartBtn');
+      if (cartBtn) cartBtn.addEventListener('click', toggleCart);
 
-    var cartOverlay = $('#cartOverlay');
-    if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
+      var cartOverlay = $('#cartOverlay');
+      if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
-    var cartClose = $('#cartClose');
-    if (cartClose) cartClose.addEventListener('click', closeCart);
+      var cartClose = $('#cartClose');
+      if (cartClose) cartClose.addEventListener('click', closeCart);
+    });
   });
 
 })();

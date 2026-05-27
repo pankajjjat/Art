@@ -1,0 +1,7 @@
+[
+  { "id": 1, "name": "Landscapes", "slug": "landscapes" },
+  { "id": 2, "name": "Abstract", "slug": "abstract" },
+  { "id": 3, "name": "Lippan Art", "slug": "lippan-art" },
+  { "id": 4, "name": "Modern Art", "slug": "modern-art" },
+  { "id": 5, "name": "Wall Decor", "slug": "wall-decor" }
+]

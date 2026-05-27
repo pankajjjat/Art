@@ -1,0 +1,12 @@
+[
+  { "question": "How long does delivery take?", "answer": "We ship within 7-10 business days across India. International shipping takes 12-18 business days." },
+  { "question": "Do you ship internationally?", "answer": "Yes! We ship worldwide. International shipping costs vary by destination and will be calculated at checkout." },
+  { "question": "What is your return policy?", "answer": "We want you to love your art. If it arrives damaged or doesn't match the description, we offer a full refund within 7 days of delivery." },
+  { "question": "Can I customize an artwork?", "answer": "Absolutely! Many of our pieces can be customized in size, color palette, or composition. Contact us via the inquiry form with your vision." },
+  { "question": "How are the artworks packaged?", "answer": "Each piece is carefully wrapped in acid-free paper, bubble-wrapped, and shipped in a sturdy corrugated box with Fragile markings." },
+  { "question": "Is Lippan Art durable?", "answer": "Yes — our lippan pieces use high-quality clay, mirrors, and sealant. They're built to last for decades with proper care. Avoid direct moisture." },
+  { "question": "Do you offer framing?", "answer": "Most pieces come ready-to-hang on a wooden frame. Some larger works may require custom framing at the buyer's preference." },
+  { "question": "What payment methods do you accept?", "answer": "We accept UPI (Google Pay, PhonePe, Paytm), bank transfer, and Razorpay cards. UPI is preferred for fastest processing." },
+  { "question": "Can I visit your studio?", "answer": "We're based in India. Studio visits can be arranged by appointment — please reach out via the contact form." },
+  { "question": "How do I care for my art?", "answer": "Keep away from direct sunlight and moisture. Dust gently with a soft dry cloth. For lippan art, avoid water near the mirror work." }
+]
