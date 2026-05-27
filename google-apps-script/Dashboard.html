@@ -3,212 +3,351 @@
 <head>
   <base target="_top">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: #1A1612;
-      color: #E8DED0;
-      padding: 16px;
+    *{margin:0;padding:0;box-sizing:border-box;}
+    :root{
+      --bg:#1A1612;
+      --card:#25211C;
+      --card-hover:#2D2822;
+      --text:#E8DED0;
+      --muted:#8A7E72;
+      --accent:#C2623E;
+      --gold:#D4A84B;
+      --border:#3A332C;
+      --green:#2A6B3C;
+      --red:#8B3A3A;
     }
-    h1 {
-      font-size: 20px;
-      font-weight: 600;
-      color: #C2623E;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    body{
+      font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      font-size:13px;
+      line-height:1.5;
     }
-    h1 small { font-size: 12px; color: #8A7E72; font-weight: 400; }
-    .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 20px;
+    .toast{
+      background:var(--green);color:#fff;padding:8px 12px;
+      border-radius:6px;font-size:12px;text-align:center;
+      display:none;position:sticky;top:0;z-index:10;
     }
-    .stat-card {
-      background: #25211C;
-      border-radius: 10px;
-      padding: 14px;
-      text-align: center;
+    .header{
+      padding:14px 16px 10px;
+      border-bottom:1px solid var(--border);
+      display:flex;align-items:center;justify-content:space-between;
     }
-    .stat-card .num {
-      font-size: 28px;
-      font-weight: 700;
-      color: #D4A84B;
+    .header h1{
+      font-size:18px;font-weight:700;
+      background:linear-gradient(135deg,var(--gold),var(--accent));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
     }
-    .stat-card .label {
-      font-size: 11px;
-      color: #8A7E72;
-      margin-top: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .header .sub{font-size:10px;color:var(--muted);-webkit-text-fill-color:var(--muted);}
+    .tabs{
+      display:flex;border-bottom:1px solid var(--border);
+      background:var(--bg);position:sticky;top:0;z-index:5;
     }
-    .stat-card .sub {
-      font-size: 10px;
-      color: #6B6056;
-      margin-top: 2px;
+    .tab{
+      flex:1;text-align:center;padding:10px 6px;cursor:pointer;
+      font-size:11px;font-weight:500;color:var(--muted);
+      border-bottom:2px solid transparent;transition:all .2s;
+      user-select:none;
     }
-    .section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: #C2623E;
-      margin: 16px 0 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .tab:hover{color:var(--text);}
+    .tab.active{color:var(--gold);border-bottom-color:var(--gold);}
+    .tab-panel{display:none;padding:12px;}
+    .tab-panel.active{display:block;}
+    .stat-grid{
+      display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px;
     }
-    .contact-item {
-      background: #25211C;
-      border-radius: 8px;
-      padding: 10px 12px;
-      margin-bottom: 6px;
-      border-left: 3px solid #D4A84B;
+    .stat-card{
+      background:var(--card);border-radius:8px;padding:12px;
+      text-align:center;
     }
-    .contact-item .name {
-      font-weight: 600;
-      font-size: 13px;
-      color: #E8DED0;
+    .stat-card .num{font-size:26px;font-weight:700;color:var(--gold);}
+    .stat-card .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+    .stat-card .sub{font-size:10px;color:var(--muted);margin-top:1px;}
+    .section-title{
+      font-size:12px;font-weight:600;color:var(--accent);
+      margin:14px 0 8px;text-transform:uppercase;letter-spacing:.5px;
     }
-    .contact-item .email {
-      font-size: 11px;
-      color: #8A7E72;
+    .item{
+      background:var(--card);border-radius:8px;padding:10px 12px;
+      margin-bottom:6px;transition:background .15s;
     }
-    .contact-item .msg {
-      font-size: 12px;
-      color: #C4B8A8;
-      margin-top: 4px;
-      line-height: 1.4;
+    .item:hover{background:var(--card-hover);}
+    .item-top{display:flex;justify-content:space-between;align-items:flex-start;}
+    .item-title{font-weight:600;font-size:13px;color:var(--text);}
+    .item-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+    .item-desc{font-size:12px;color:#C4B8A8;margin-top:4px;line-height:1.4;}
+    .item-actions{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap;}
+    .badge{
+      display:inline-block;font-size:9px;padding:2px 6px;
+      border-radius:4px;font-weight:500;letter-spacing:.3px;
     }
-    .contact-item .date {
-      font-size: 10px;
-      color: #6B6056;
-      margin-top: 2px;
+    .badge-new{background:var(--accent);color:var(--bg);}
+    .badge-read{background:var(--border);color:var(--muted);}
+    .badge-stock{background:var(--green);color:#fff;}
+    .badge-nostock{background:var(--red);color:#fff;}
+    .badge-featured{background:var(--gold);color:var(--bg);}
+    .badge-waiting{background:#8B6F3A;color:#fff;}
+    .badge-shipped{background:var(--accent);color:var(--bg);}
+    .badge-delivered{background:var(--green);color:#fff;}
+    .btn{
+      border:none;padding:6px 12px;border-radius:5px;font-size:11px;
+      font-weight:500;cursor:pointer;transition:all .2s;font-family:inherit;
     }
-    .contact-item .badge {
-      display: inline-block;
-      font-size: 9px;
-      padding: 1px 6px;
-      border-radius: 4px;
-      margin-left: 6px;
-    }
-    .badge-new { background: #C2623E; color: #1A1612; }
-    .badge-read { background: #3A332C; color: #8A7E72; }
-    .btn {
-      background: #C2623E;
-      border: none;
-      color: #1A1612;
-      padding: 8px 16px;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 12px;
-      cursor: pointer;
-      width: 100%;
-      margin-top: 12px;
-      transition: background 0.2s;
-    }
-    .btn:hover { background: #D4724E; }
-    .btn-secondary {
-      background: #3A332C;
-      color: #E8DED0;
-    }
-    .btn-secondary:hover { background: #4A433C; }
-    .loading {
-      text-align: center;
-      padding: 40px 0;
-      color: #6B6056;
-      font-size: 13px;
-    }
-    .empty-state {
-      text-align: center;
-      padding: 20px 0;
-      color: #6B6056;
-      font-size: 12px;
-    }
-    .footer-actions {
-      margin-top: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .toast {
-      background: #2A6B3C;
-      color: #FFF;
-      padding: 8px 12px;
-      border-radius: 6px;
-      font-size: 12px;
-      text-align: center;
-      margin-bottom: 10px;
-      display: none;
-    }
+    .btn-primary{background:var(--accent);color:var(--bg);}
+    .btn-primary:hover{background:#D4724E;}
+    .btn-sm{background:var(--border);color:var(--text);padding:4px 10px;font-size:10px;}
+    .btn-sm:hover{background:#4A433C;}
+    .btn-sm.green{background:var(--green);color:#fff;}
+    .btn-sm.green:hover{background:#327C4A;}
+    .btn-sm.red{background:var(--red);color:#fff;}
+    .btn-sm.red:hover{background:#9E4444;}
+    .btn-sm.gold{background:var(--gold);color:var(--bg);}
+    .btn-sm.gold:hover{background:#E0B85A;}
+    .loading{text-align:center;padding:30px 0;color:var(--muted);font-size:12px;}
+    .empty{text-align:center;padding:20px;color:var(--muted);font-size:12px;}
+    .mt-8{margin-top:8px;}
+    .gap-4{display:flex;gap:4px;flex-wrap:wrap;}
+    /* scrollbar */
+    ::-webkit-scrollbar{width:4px;}
+    ::-webkit-scrollbar-track{background:var(--bg);}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
   </style>
 </head>
 <body>
-  <div id="toast" class="toast"></div>
-  <h1>🌍 MITTI <small>Dashboard</small></h1>
-  <div id="stats" class="stats-grid"></div>
-  <div class="section-title">Recent Inquiries</div>
-  <div id="contacts"></div>
-  <div class="footer-actions">
-    <button class="btn" onclick="refresh()">↻ Refresh</button>
-    <button class="btn btn-secondary" onclick="google.script.run.withSuccessHandler(function(){showToast('Contacts tab ready!')}).ensureContactsSheet()">+ Create Contacts Tab</button>
-  </div>
+<div id="toast" class="toast"></div>
 
-  <script>
-    function refresh() {
-      document.getElementById('contacts').innerHTML = '<div class="loading">Loading...</div>';
-      google.script.run
-        .withSuccessHandler(renderStats)
-        .getDashboardStats();
-      
-      google.script.run
-        .withSuccessHandler(renderContacts)
-        .getContacts();
+<div class="header">
+  <div><h1>🌍 MITTI</h1><div class="sub">Dashboard</div></div>
+  <button class="btn btn-sm" onclick="refresh()">↻</button>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-tab="overview" onclick="switchTab('overview')">Overview</div>
+  <div class="tab" data-tab="products" onclick="switchTab('products')">Products</div>
+  <div class="tab" data-tab="inquiries" onclick="switchTab('inquiries')">Inquiries</div>
+  <div class="tab" data-tab="orders" onclick="switchTab('orders')">Orders</div>
+</div>
+
+<!-- OVERVIEW TAB -->
+<div class="tab-panel active" id="panel-overview">
+  <div class="stat-grid" id="stats"></div>
+  <div class="section-title">⬥ Quick Actions</div>
+  <div class="item" onclick="google.script.run.withSuccessHandler(function(){showToast('Opened!')}).openSheetTab('Artworks')" style="cursor:pointer;">
+    <div class="item-title">📦 Manage Products</div>
+    <div class="item-meta">Open the Artworks sheet tab</div>
+  </div>
+  <div class="item" onclick="google.script.run.withSuccessHandler(function(){showToast('Opened!')}).openSheetTab('Contacts')" style="cursor:pointer;">
+    <div class="item-title">💬 View Inquiries</div>
+    <div class="item-meta">Open the Contacts sheet tab</div>
+  </div>
+  <div class="item" onclick="google.script.run.withSuccessHandler(function(){showToast('Opened!')}).openSheetTab('Website_Content')" style="cursor:pointer;">
+    <div class="item-title">✏️ Edit Site Content</div>
+    <div class="item-meta">Update text across your website</div>
+  </div>
+  <div class="item" onclick="google.script.run.withSuccessHandler(function(){showToast('Opened!')}).openSheetTab('Orders')" style="cursor:pointer;">
+    <div class="item-title">📋 View Orders</div>
+    <div class="item-meta">Manage customer orders</div>
+  </div>
+  <div class="section-title">⬥ Latest Inquiries</div>
+  <div id="latest-contacts"></div>
+  <div class="section-title">⬥ Price Range</div>
+  <div id="price-range"></div>
+</div>
+
+<!-- PRODUCTS TAB -->
+<div class="tab-panel" id="panel-products">
+  <div id="products-list"></div>
+</div>
+
+<!-- INQUIRIES TAB -->
+<div class="tab-panel" id="panel-inquiries">
+  <div class="section-title">All Inquiries</div>
+  <div id="contacts-list"></div>
+</div>
+
+<!-- ORDERS TAB -->
+<div class="tab-panel" id="panel-orders">
+  <div id="orders-list"></div>
+</div>
+
+<script>
+var state = {};
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active');});
+  document.querySelector('.tab[data-tab="'+name+'"]').classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  if(name==='products' && !state.products) loadProducts();
+  if(name==='inquiries' && !state.contacts) loadInquiries();
+  if(name==='orders' && !state.orders) loadOrders();
+}
+
+function refresh(){
+  state={};
+  document.getElementById('stats').innerHTML='<div class="loading">Loading...</div>';
+  document.getElementById('latest-contacts').innerHTML='';
+  document.getElementById('price-range').innerHTML='';
+  loadOverview();
+  if(document.querySelector('.tab.active').dataset.tab==='products') loadProducts();
+  if(document.querySelector('.tab.active').dataset.tab==='inquiries') loadInquiries();
+  if(document.querySelector('.tab.active').dataset.tab==='orders') loadOrders();
+}
+
+function showToast(msg, isError){
+  var t=document.getElementById('toast');
+  t.textContent=msg;
+  t.style.background=isError?'var(--red)':'var(--green)';
+  t.style.display='block';
+  clearTimeout(t._hide);
+  t._hide=setTimeout(function(){t.style.display='none';},3000);
+}
+
+function loadOverview(){
+  google.script.run.withSuccessHandler(function(s){
+    if(s.error){showToast(s.error,true);return;}
+    document.getElementById('stats').innerHTML=
+      '<div class="stat-card"><div class="num">'+s.totalArtworks+'</div><div class="label">Products</div><div class="sub">'+s.inStock+' in stock</div></div>'+
+      '<div class="stat-card"><div class="num">'+s.categories+'</div><div class="label">Categories</div><div class="sub">₹'+fmt(s.priceMin)+' – ₹'+fmt(s.priceMax)+'</div></div>'+
+      '<div class="stat-card"><div class="num">'+s.orders+'</div><div class="label">Orders</div><div class="sub">'+s.pendingOrders+' pending</div></div>'+
+      '<div class="stat-card"><div class="num">'+s.contacts+'</div><div class="label">Inquiries</div><div class="sub">'+s.unreadContacts+' unread</div></div>';
+  }).getDashboardStats();
+
+  google.script.run.withSuccessHandler(function(cc){
+    if(!cc||cc.length===0){document.getElementById('latest-contacts').innerHTML='<div class="empty">No inquiries yet</div>';return;}
+    var html='';
+    for(var i=0;i<Math.min(cc.length,5);i++){
+      var c=cc[i];
+      html+='<div class="item"><div class="item-top"><div><span class="item-title">'+esc(c.name||'Anonymous')+'</span> <span class="badge '+(c.status==='New'?'badge-new':'badge-read')+'">'+(c.status||'New')+'</span></div></div>'+
+        '<div class="item-meta">'+esc(c.email||'')+(c.phone?' · '+esc(c.phone):'')+'</div>'+
+        '<div class="item-desc">'+esc((c.message||'').substring(0,100))+(c.message&&c.message.length>100?'...':'')+'</div></div>';
     }
-    
-    function renderStats(stats) {
-      document.getElementById('stats').innerHTML = [
-        '<div class="stat-card"><div class="num">' + stats.totalArtworks + '</div><div class="label">Products</div><div class="sub">' + stats.inStock + ' in stock</div></div>',
-        '<div class="stat-card"><div class="num">' + stats.categories + '</div><div class="label">Categories</div><div class="sub">₹' + stats.priceMin + ' – ₹' + stats.priceMax + '</div></div>',
-        '<div class="stat-card"><div class="num">' + stats.orders + '</div><div class="label">Orders</div><div class="sub">● ● ●</div></div>',
-        '<div class="stat-card"><div class="num">' + stats.contacts + '</div><div class="label">Inquiries</div><div class="sub">' + stats.unreadContacts + ' unread</div></div>'
-      ].join('');
+    document.getElementById('latest-contacts').innerHTML=html;
+  }).getContacts();
+
+  google.script.run.withSuccessHandler(function(aw){
+    if(!aw||aw.length===0)return;
+    var prices=aw.map(function(p){return Number(p.price)||0;}).filter(function(p){return p>0;});
+    if(prices.length===0){document.getElementById('price-range').innerHTML='<div class="empty">No price data</div>';return;}
+    var min=Math.min.apply(null,prices);
+    var max=Math.max.apply(null,prices);
+    document.getElementById('price-range').innerHTML=
+      '<div class="item"><div class="item-title">₹'+fmt(min)+' – ₹'+fmt(max)+'</div><div class="item-meta">'+prices.length+' products with prices</div></div>';
+  }).getArtworks();
+}
+
+function loadProducts(){
+  document.getElementById('products-list').innerHTML='<div class="loading">Loading...</div>';
+  google.script.run.withSuccessHandler(function(products){
+    state.products=products;
+    if(!products||products.length===0){document.getElementById('products-list').innerHTML='<div class="empty">No products found</div>';return;}
+    var html='';
+    for(var i=0;i<products.length;i++){
+      var p=products[i];
+      var tags='';
+      tags+=p.featured?'<span class="badge badge-featured">★ Featured</span> ':'';
+      tags+=p.inStock?'<span class="badge badge-stock">In Stock</span> ':'<span class="badge badge-nostock">Out of Stock</span> ';
+      html+='<div class="item">'+
+        '<div class="item-top"><div><span class="item-title">'+esc(p.title||'')+'</span></div><span class="item-meta">₹'+fmt(p.price||0)+'</span></div>'+
+        '<div class="item-meta">'+esc(p.category||'')+' · '+esc(p.dimensions||'')+'</div>'+
+        '<div class="gap-4 mt-8">'+tags+'</div>'+
+        '<div class="item-actions">'+
+        '<button class="btn btn-sm gold" onclick="toggleFeatured(\''+escAttr(p.slug)+'\','+(i+1)+')">'+(p.featured?'★ Unfeature':'☆ Feature')+'</button>'+
+        '<button class="btn btn-sm '+(p.inStock?'red':'green')+'" onclick="toggleStock(\''+escAttr(p.slug)+'\','+(i+1)+')">'+(p.inStock?'✕ Mark OOS':'✓ Mark In Stock')+'</button>'+
+        '<button class="btn btn-sm" onclick="google.script.run.openSheetTab(\'Artworks\')">Open Sheet</button>'+
+        '</div></div>';
     }
-    
-    function renderContacts(contacts) {
-      var html = '';
-      if (!contacts || contacts.length === 0) {
-        html = '<div class="empty-state">No inquiries yet.</div>';
-      } else {
-        contacts.forEach(function(c) {
-          var badge = c.status === 'New' ? '<span class="badge badge-new">NEW</span>' : '<span class="badge badge-read">read</span>';
-          var date = c.timestamp ? new Date(c.timestamp).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
-          html += [
-            '<div class="contact-item">',
-            '  <div><span class="name">' + escapeHtml(c.name || 'Anonymous') + '</span> ' + badge + '</div>',
-            '  <div class="email">' + escapeHtml(c.email || '') + (c.phone ? ' · ' + escapeHtml(c.phone) : '') + '</div>',
-            '  <div class="msg">' + escapeHtml(c.message || '') + '</div>',
-            '  <div class="date">' + date + '</div>',
-            '</div>'
-          ].join('\n');
-        });
-      }
-      document.getElementById('contacts').innerHTML = html;
+    document.getElementById('products-list').innerHTML=html;
+  }).getArtworks();
+}
+
+function loadInquiries(){
+  document.getElementById('contacts-list').innerHTML='<div class="loading">Loading...</div>';
+  google.script.run.withSuccessHandler(function(contacts){
+    state.contacts=contacts;
+    if(!contacts||contacts.length===0){document.getElementById('contacts-list').innerHTML='<div class="empty">No inquiries yet</div>';return;}
+    var html='';
+    for(var i=0;i<contacts.length;i++){
+      var c=contacts[i];
+      var row=i+2; // header is row 1
+      html+='<div class="item">'+
+        '<div class="item-top"><div><span class="item-title">'+esc(c.name||'Anonymous')+'</span> <span class="badge '+(c.status==='New'?'badge-new':'badge-read')+'">'+(c.status||'New')+'</span></div>'+
+        '<div class="item-meta">'+(c.timestamp?new Date(c.timestamp).toLocaleDateString('en-IN',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'')+'</div></div>'+
+        '<div class="item-meta">'+esc(c.email||'')+(c.phone?' · '+esc(c.phone):'')+'</div>'+
+        '<div class="item-desc">'+esc(c.message||'')+'</div>'+
+        '<div class="item-actions">'+
+        (c.status==='New'?'<button class="btn btn-sm green" onclick="markRead('+i+')">✓ Mark Read</button>':'<button class="btn btn-sm" onclick="markUnread('+i+')">↩ Mark New</button>')+
+        '</div></div>';
     }
-    
-    function escapeHtml(s) {
-      if (!s) return '';
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    document.getElementById('contacts-list').innerHTML=html;
+  }).getContacts();
+}
+
+function loadOrders(){
+  document.getElementById('orders-list').innerHTML='<div class="loading">Loading...</div>';
+  google.script.run.withSuccessHandler(function(orders){
+    state.orders=orders;
+    if(!orders||orders.length===0){document.getElementById('orders-list').innerHTML='<div class="empty">No orders yet</div>';return;}
+    var html='';
+    for(var i=0;i<orders.length;i++){
+      var o=orders[i];
+      var statusBadge='badge-waiting';
+      if(o.status==='Shipped') statusBadge='badge-shipped';
+      else if(o.status==='Delivered') statusBadge='badge-delivered';
+      html+='<div class="item">'+
+        '<div class="item-top"><div><span class="item-title">'+esc(o.id||'#')+'</span> <span class="badge '+statusBadge+'">'+(o.status||'Waiting')+'</span></div>'+
+        '<span class="item-meta">₹'+fmt(o.price||0)+'</span></div>'+
+        '<div class="item-meta">'+esc(o.customer||'')+(o.email?' · '+esc(o.email):'')+'</div>'+
+        '<div class="item-desc">'+esc(o.artwork_name||'')+'</div></div>';
     }
-    
-    function showToast(msg) {
-      var t = document.getElementById('toast');
-      t.textContent = msg;
-      t.style.display = 'block';
-      setTimeout(function(){ t.style.display = 'none'; }, 3000);
-    }
-    
-    // Auto-load on open
-    refresh();
-  </script>
+    document.getElementById('orders-list').innerHTML=html;
+  }).getOrders();
+}
+
+function toggleFeatured(slug,idx){
+  google.script.run.withSuccessHandler(function(r){
+    showToast(r.message||'Updated!');
+    loadProducts();
+    document.getElementById('stats').innerHTML='<div class="loading">Refreshing...</div>';
+    loadOverview();
+  }).withFailureHandler(function(e){showToast('Error: '+e.message,true);}).toggleFeatured(slug);
+}
+
+function toggleStock(slug,idx){
+  google.script.run.withSuccessHandler(function(r){
+    showToast(r.message||'Updated!');
+    loadProducts();
+    document.getElementById('stats').innerHTML='<div class="loading">Refreshing...</div>';
+    loadOverview();
+  }).withFailureHandler(function(e){showToast('Error: '+e.message,true);}).toggleStock(slug);
+}
+
+function markRead(idx){
+  var contact=state.contacts[idx];
+  if(!contact)return;
+  google.script.run.withSuccessHandler(function(r){
+    showToast(r.message||'Marked as read');
+    loadInquiries();
+    loadOverview();
+  }).withFailureHandler(function(e){showToast('Error: '+e.message,true);}).markContactRead(idx+2);
+}
+
+function markUnread(idx){
+  var contact=state.contacts[idx];
+  if(!contact)return;
+  google.script.run.withSuccessHandler(function(r){
+    showToast(r.message||'Marked as new');
+    loadInquiries();
+    loadOverview();
+  }).withFailureHandler(function(e){showToast('Error: '+e.message,true);}).markContactUnread(idx+2);
+}
+
+function esc(s){if(!s)return '';return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function escAttr(s){if(!s)return '';return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function fmt(n){if(!n&&n!==0)return '';return Number(n).toLocaleString('en-IN');}
+
+// Auto-load
+loadOverview();
+</script>
 </body>
 </html>

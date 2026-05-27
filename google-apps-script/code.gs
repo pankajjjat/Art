@@ -445,10 +445,23 @@ function onOpen() {
     .createMenu('🌍 MITTI')
     .addItem('📊 Dashboard', 'showDashboard')
     .addSeparator()
+    .addItem('📦 Products', 'openArtworksTab')
+    .addItem('💬 Inquiries', 'openContactsTab')
+    .addItem('📋 Orders', 'openOrdersTab')
+    .addItem('✏️ Site Content', 'openContentTab')
+    .addSeparator()
+    .addItem('➕ New Product', 'openNewProduct')
     .addItem('✚ Create Contacts Tab', 'ensureContactsSheet')
+    .addSeparator()
     .addItem('📦 Fix Prices & Stock', 'fixArtworkData')
     .addToUi();
 }
+
+function openArtworksTab() { openSheetTab('Artworks'); }
+function openContactsTab() { openSheetTab('Contacts'); }
+function openOrdersTab() { openSheetTab('Orders'); }
+function openContentTab() { openSheetTab('Website_Content'); }
+function openNewProduct() { openSheetTab('Artworks'); }
 
 /**
  * Opens the Dashboard sidebar.
@@ -482,6 +495,7 @@ function getDashboardStats() {
       priceMin: prices.length ? Math.min(...prices) : 0,
       priceMax: prices.length ? Math.max(...prices) : 0,
       orders: orders.length,
+      pendingOrders: orders.filter(o => (o.status || '').toString().toLowerCase() !== 'delivered').length,
       contacts: contacts.length,
       unreadContacts: contacts.filter(c => (c.status || '').toString().toLowerCase() === 'new').length
     };
@@ -516,4 +530,90 @@ function ensureContactsSheet() {
   sheet.setFrozenRows(1);
   sheet.autoResizeColumns(1, headers[0].length);
   SpreadsheetApp.getUi().alert('✅ Contacts tab created! Inquiries from the website will appear here.');
+}
+
+// ─── DASHBOARD ACTIONS ───────────────────────────────────────────────────────
+
+/**
+ * Toggle the featured flag of a product by slug.
+ */
+function toggleFeatured(slug) {
+  const sheet = getSheet('Artworks');
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0].map(h => String(h).trim().toLowerCase());
+  const slugIdx = headers.indexOf('slug');
+  const featIdx = headers.indexOf('featured');
+  if (slugIdx === -1 || featIdx === -1) throw new Error('Required columns not found');
+  
+  for (let r = 1; r < data.length; r++) {
+    if (String(data[r][slugIdx]).trim() === slug) {
+      const current = String(data[r][featIdx]).trim().toUpperCase();
+      const newVal = (current === 'TRUE') ? 'FALSE' : 'TRUE';
+      sheet.getRange(r + 1, featIdx + 1).setValue(newVal);
+      SpreadsheetApp.flush();
+      return { success: true, message: newVal === 'TRUE' ? '⭐ Featured!' : 'Unfeatured' };
+    }
+  }
+  throw new Error('Product not found: ' + slug);
+}
+
+/**
+ * Toggle the inStock flag of a product by slug.
+ */
+function toggleStock(slug) {
+  const sheet = getSheet('Artworks');
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0].map(h => String(h).trim().toLowerCase());
+  const slugIdx = headers.indexOf('slug');
+  const stockIdx = headers.indexOf('instock');
+  if (slugIdx === -1 || stockIdx === -1) throw new Error('Required columns not found');
+  
+  for (let r = 1; r < data.length; r++) {
+    if (String(data[r][slugIdx]).trim() === slug) {
+      const current = String(data[r][stockIdx]).trim().toUpperCase();
+      const newVal = (current === 'TRUE') ? 'FALSE' : 'TRUE';
+      sheet.getRange(r + 1, stockIdx + 1).setValue(newVal);
+      SpreadsheetApp.flush();
+      return { success: true, message: newVal === 'TRUE' ? '✅ In Stock' : '❌ Out of Stock' };
+    }
+  }
+  throw new Error('Product not found: ' + slug);
+}
+
+/**
+ * Mark a contact inquiry as Read (row = actual sheet row number, 1-indexed).
+ */
+function markContactRead(row) {
+  const sheet = getSheet('Contacts');
+  const headers = sheet.getDataRange().getValues()[0];
+  const statusIdx = headers.map(h => String(h).trim().toLowerCase()).indexOf('status');
+  if (statusIdx === -1) throw new Error('Status column not found');
+  sheet.getRange(row, statusIdx + 1).setValue('Read');
+  SpreadsheetApp.flush();
+  return { success: true, message: '✓ Marked as read' };
+}
+
+/**
+ * Mark a contact inquiry as New (unread).
+ */
+function markContactUnread(row) {
+  const sheet = getSheet('Contacts');
+  const headers = sheet.getDataRange().getValues()[0];
+  const statusIdx = headers.map(h => String(h).trim().toLowerCase()).indexOf('status');
+  if (statusIdx === -1) throw new Error('Status column not found');
+  sheet.getRange(row, statusIdx + 1).setValue('New');
+  SpreadsheetApp.flush();
+  return { success: true, message: '↩ Marked as new' };
+}
+
+/**
+ * Activate a specific sheet tab (switches the user's view to that tab).
+ */
+function openSheetTab(name) {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName(name);
+  if (!sheet) throw new Error('Sheet "' + name + '" not found');
+  sheet.activate();
+  ss.setActiveSheet(sheet);
+  return { success: true };
 }

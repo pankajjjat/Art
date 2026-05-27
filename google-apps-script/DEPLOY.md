@@ -4,7 +4,7 @@
 
 1. Go to [sheets.new](https://sheets.new)
 2. Rename the spreadsheet to **MITTI CMS**
-3. Run the **createAllSheets()** function (see Step 3) — this auto-creates all tabs with headers and sample data
+3. Run the **createAllSheets()** function (see next step) — this auto-creates all tabs with headers and sample data
 
 ## Step 2: Link Apps Script
 
@@ -21,18 +21,18 @@
 2. Click **Run** — it will ask for permissions (review your own sheet data)
 3. After running, check your Google Sheet — all tabs should exist with sample data
 
-## Step 3: Create the Contacts Tab (skip if it already exists)
-
-Run the **ensureContactsSheet()** function in the Apps Script editor to create the Contacts tab. This only adds the tab — it won't touch your existing data.
-
-## Step 3b: Run the Dashboard Setup
+## Step 3: Run the Dashboard Setup
 
 1. Save the project, then **reload your Google Sheet**
-2. You'll see a new **🌍 MITTI** menu appear in the sheet toolbar
-3. Click **🌍 MITTI → 📊 Dashboard** to open the sidebar dashboard
-4. Run **🌍 MITTI → ✚ Create Contacts Tab** to add the Contacts sheet (if not done above)
+2. You'll see a new **🌍 MITTI** menu appear in the sheet toolbar:
+   - **📊 Dashboard** — opens the sidebar with stats, products, inquiries, orders
+   - **📦 / 💬 / 📋 / ✏️** — shortcut to each sheet tab
+   - **➕ New Product** — opens the Artworks tab to add a new row
+   - **✚ Create Contacts Tab** — adds the Contacts sheet (run once)
+   - **📦 Fix Prices & Stock** — resets correct prices
+3. Click **🌍 MITTI → ✚ Create Contacts Tab** to add the Contacts sheet (if it doesn't exist yet)
 
-## Step 5: Deploy as Web App
+## Step 4: Deploy as Web App
 
 1. Click **Deploy → New deployment**
 2. Choose type: **Web app**
@@ -45,10 +45,10 @@ Run the **ensureContactsSheet()** function in the Apps Script editor to create t
    `https://script.google.com/macros/s/ABC123.../exec`
 6. Click **Done**
 
-## Step 6: Configure the Frontend
+## Step 5: Configure the Frontend
 
 1. Open `js/api.js` in the project
-2. Replace `YOUR_DEPLOYED_SCRIPT_URL` with the URL from Step 5
+2. Replace `YOUR_DEPLOYED_SCRIPT_URL` with the URL from Step 4
 3. Commit and push to GitHub:
 
 ```bash
