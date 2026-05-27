@@ -190,6 +190,9 @@ const MITTI_API = (function() {
 
   return {
 
+    /** Expose the API URL so other modules can use it */
+    API_BASE: API_BASE,
+
     /** Is the API URL configured? */
     get isConfigured() {
       return API_BASE && API_BASE !== 'YOUR_DEPLOYED_SCRIPT_URL';
