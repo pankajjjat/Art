@@ -314,7 +314,7 @@ blog_index = f'''<!DOCTYPE html>
         <div class="footer-brand"><div class="footer-logo">MI<span>TTI</span></div><p class="footer-tagline">From earth, for the wall.</p></div>
         <div><h4>Explore</h4><ul class="footer-links"><li><a href="../#gallery">Gallery</a></li><li><a href="../blog/">Blog</a></li></ul></div>
         <div><h4>Support</h4><ul class="footer-links"><li><a href="../faq/">FAQ</a></li><li><a href="../shipping/">Shipping</a></li><li><a href="../payment/">Payment</a></li></ul></div>
-        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li></ul></div>
+        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li><li><a href="{pin_url}">Pinterest</a></li></ul></div>
       </div>
       <div class="footer-bottom">&copy; 2026 MITTI Art Gallery.</div>
     </div>
@@ -557,7 +557,7 @@ for bp in blog_posts_data:
         <div class="footer-brand"><div class="footer-logo">MI<span>TTI</span></div><p class="footer-tagline">From earth, for the wall.</p></div>
         <div><h4>Explore</h4><ul class="footer-links"><li><a href="../../#gallery">Gallery</a></li><li><a href="../../blog/">Blog</a></li></ul></div>
         <div><h4>Support</h4><ul class="footer-links"><li><a href="../../faq/">FAQ</a></li><li><a href="../../shipping/">Shipping</a></li><li><a href="../../payment/">Payment</a></li></ul></div>
-        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li></ul></div>
+        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li><li><a href="{pin_url}">Pinterest</a></li></ul></div>
       </div>
       <div class="footer-bottom">&copy; 2026 MITTI Art Gallery.</div>
     </div>
@@ -655,7 +655,7 @@ for slug, (title, qa_list) in pages.items():
         <div class="footer-brand"><div class="footer-logo">MI<span>TTI</span></div><p class="footer-tagline">From earth, for the wall.</p></div>
         <div><h4>Explore</h4><ul class="footer-links"><li><a href="../#gallery">Gallery</a></li><li><a href="../blog/">Blog</a></li></ul></div>
         <div><h4>Support</h4><ul class="footer-links"><li><a href="../faq/">FAQ</a></li><li><a href="../shipping/">Shipping</a></li><li><a href="../payment/">Payment</a></li></ul></div>
-        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li></ul></div>
+        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li><li><a href="{pin_url}">Pinterest</a></li></ul></div>
       </div>
       <div class="footer-bottom">&copy; 2026 MITTI Art Gallery.</div>
     </div>
