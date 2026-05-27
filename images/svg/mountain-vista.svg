@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+<defs><linearGradient id="mv1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#2a1f18"/><stop offset="100%" stop-color="#0c0806"/></linearGradient><linearGradient id="mv2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d47a50"/><stop offset="100%" stop-color="#a84f2a"/></linearGradient><linearGradient id="mv3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0b470" stop-opacity=".4"/><stop offset="100%" stop-color="#d4a056" stop-opacity="0"/></linearGradient></defs>
+<rect width="800" height="600" fill="url(#mv1)"/>
+<polygon points="0,350 150,120 300,350" fill="#2a1f18" opacity=".9"/>
+<polygon points="100,400 350,80 600,400" fill="#1a1612"/>
+<polygon points="200,450 450,150 700,450" fill="#2a1f18" opacity=".8"/>
+<polygon points="300,500 550,200 800,500" fill="#1a1612" opacity=".6"/>
+<ellipse cx="400" cy="520" rx="350" ry="80" fill="url(#mv3)"/>
+<circle cx="620" cy="100" r="40" fill="#e0b470" opacity=".3"/>
+<circle cx="620" cy="100" r="25" fill="#e0b470" opacity=".5"/>
+</svg>
