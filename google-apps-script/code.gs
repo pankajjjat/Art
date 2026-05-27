@@ -370,3 +370,67 @@ function createAllSheets() {
     .createTextOutput(JSON.stringify({ success: true, message: 'All sheets created!' }))
     .setMimeType(ContentService.MimeType.JSON);
 }
+
+// ─── DATA FIX: update prices & inStock in the Artworks sheet ─────────────────
+/**
+ * Run this ONCE in the Apps Script editor after you've pasted updated code.gs.
+ * It finds the Artworks sheet, matches products by slug, and updates only
+ * the price and inStock columns — leaving everything else (descriptions,
+ * dimensions, etc.) untouched.
+ */
+function fixArtworkData() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  const sheet = ss.getSheetByName('Artworks');
+  if (!sheet) throw new Error('Artworks sheet not found');
+  
+  const data = sheet.getDataRange().getValues();
+  const headers = data[0].map(h => String(h).trim().toLowerCase());
+  
+  // Find column indices
+  const slugIdx = headers.indexOf('slug');
+  const priceIdx = headers.indexOf('price');
+  const stockIdx = headers.indexOf('instock');
+  
+  if (slugIdx === -1 || priceIdx === -1 || stockIdx === -1) {
+    throw new Error('Required columns not found (slug, price, inStock)');
+  }
+  
+  // Correct data: slug → [price, inStock]
+  const fixes = {
+    'mountain-vista':     [12999, true],
+    'midnight-solitude':  [8999,  true],
+    'forest-canopy':      [10999, true],
+    'golden-pastoral':    [7499,  true],
+    'ethereal-mist':      [6999,  true],
+    'earthen-flow':       [8499,  true],
+    'textured-rhythms':   [9999,  true],
+    'golden-cascade':     [14999, true],
+    'mirror-mandala':     [5999,  true],
+    'geometric-radiance': [7499,  true],
+    'urban-layers':       [11999, true],
+    'modern-symmetry':    [9999,  true],
+    'ornate-opulence':    [18999, true]
+  };
+  
+  let updated = 0;
+  
+  for (let r = 1; r < data.length; r++) {
+    const slug = String(data[r][slugIdx]).trim();
+    const fix = fixes[slug];
+    if (!fix) continue;
+    
+    const row = r + 1; // 1-indexed for Sheets API
+    const colPrice = priceIdx + 1;
+    const colStock = stockIdx + 1;
+    
+    sheet.getRange(row, colPrice).setValue(fix[0]);
+    sheet.getRange(row, colStock).setValue(fix[1]);
+    updated++;
+  }
+  
+  SpreadsheetApp.flush();
+  
+  const msg = 'Fixed ' + updated + ' products — prices and availability updated.';
+  console.log(msg);
+  SpreadsheetApp.getUi().alert(msg);
+}
