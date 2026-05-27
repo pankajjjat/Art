@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:dc="http://purl.org/dc/elements/1.1/"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>MITTI Art Gallery — Blog</title>
+    <link>https://pankajjjat.github.io/Art/blog/</link>
+    <description>Stories, guides, and inspiration from MITTI Art Gallery — traditional Indian lippan art, handicrafts, and home decor.</description>
+    <language>en</language>
+    <lastBuildDate>Mon, 18 Feb 2026 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://pankajjjat.github.io/Art/blog/feed.xml" rel="self" type="application/rss+xml"/>
+    <image>
+      <url>https://pankajjjat.github.io/Art/images/optimized/og-image.jpg</url>
+      <title>MITTI Art Gallery — Blog</title>
+      <link>https://pankajjjat.github.io/Art/blog/</link>
+    </image>
+
+    <item>
+      <title>Lippan Art Gift Guide: 5 Unique Indian Handicraft Gifts for Every Occasion</title>
+      <link>https://pankajjjat.github.io/Art/blog/lippan-art-gift-guide/</link>
+      <guid>https://pankajjjat.github.io/Art/blog/lippan-art-gift-guide/</guid>
+      <description>Looking for a meaningful gift? From housewarming to weddings — lippan art pieces make unforgettable, handcrafted presents that tell a story.</description>
+      <dc:creator><![CDATA[MITTI Art Gallery]]></dc:creator>
+      <category>Gifting</category>
+      <pubDate>Wed, 18 Feb 2026 00:00:00 +0000</pubDate>
+      <enclosure url="https://pankajjjat.github.io/Art/images/optimized/blog-gift-guide.jpg" type="image/jpeg"/>
+    </item>
+
+    <item>
+      <title>How to Display Lippan Art in Your Home: A Complete Guide</title>
+      <link>https://pankajjjat.github.io/Art/blog/how-to-display-lippan-art-home/</link>
+      <guid>https://pankajjjat.github.io/Art/blog/how-to-display-lippan-art-home/</guid>
+      <description>Lighting, placement, framing, and pairing tips for lippan art. Make your mirror-work pieces shine with these expert display strategies.</description>
+      <dc:creator><![CDATA[MITTI Art Gallery]]></dc:creator>
+      <category>Home Decor</category>
+      <pubDate>Tue, 10 Feb 2026 00:00:00 +0000</pubDate>
+      <enclosure url="https://pankajjjat.github.io/Art/images/optimized/blog-display-guide.jpg" type="image/jpeg"/>
+    </item>
+
+    <item>
+      <title>Lippan Art vs Warli Art: Key Differences Every Art Lover Should Know</title>
+      <link>https://pankajjjat.github.io/Art/blog/lippan-art-vs-warli-art/</link>
+      <guid>https://pankajjjat.github.io/Art/blog/lippan-art-vs-warli-art/</guid>
+      <description>Two of India's most beloved folk art forms — Lippan and Warli — explained. Materials, techniques, origins, and which one suits your space better.</description>
+      <dc:creator><![CDATA[MITTI Art Gallery]]></dc:creator>
+      <category>Art Guide</category>
+      <pubDate>Sun, 01 Feb 2026 00:00:00 +0000</pubDate>
+      <enclosure url="https://pankajjjat.github.io/Art/images/optimized/blog-lippan-vs-warli.png" type="image/png"/>
+    </item>
+
+    <item>
+      <title>Modern Lippan Wall Decor: 7 Stunning Ideas for Your Home</title>
+      <link>https://pankajjjat.github.io/Art/blog/modern-lippan-wall-decor-ideas/</link>
+      <guid>https://pankajjjat.github.io/Art/blog/modern-lippan-wall-decor-ideas/</guid>
+      <description>From minimalist white-and-gold compositions to bold terracotta statements — explore 7 modern lippan wall decor ideas that transform any room into a gallery.</description>
+      <dc:creator><![CDATA[MITTI Art Gallery]]></dc:creator>
+      <category>Home Decor</category>
+      <pubDate>Thu, 22 Jan 2026 00:00:00 +0000</pubDate>
+      <enclosure url="https://pankajjjat.github.io/Art/images/optimized/blog-lippan-decor.jpg" type="image/jpeg"/>
+    </item>
+
+    <item>
+      <title>What Is Lippan Art? India's Ancient Mirror Craft Explained</title>
+      <link>https://pankajjjat.github.io/Art/blog/what-is-lippan-art-india/</link>
+      <guid>https://pankajjjat.github.io/Art/blog/what-is-lippan-art-india/</guid>
+      <description>Discover the centuries-old tradition of Lippan Art — the mud-and-mirror craft from Kutch, Gujarat. Learn how this ancient technique is being reimagined for modern Indian homes.</description>
+      <dc:creator><![CDATA[MITTI Art Gallery]]></dc:creator>
+      <category>Lippan Art</category>
+      <pubDate>Thu, 15 Jan 2026 00:00:00 +0000</pubDate>
+      <enclosure url="https://pankajjjat.github.io/Art/images/optimized/blog-lippan-intro.jpg" type="image/jpeg"/>
+    </item>
+
+  </channel>
+</rss>

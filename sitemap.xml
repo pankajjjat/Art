@@ -1,26 +1,168 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://pankajjjat.github.io/Art/</loc><priority>1.0</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/shipping/</loc><priority>0.5</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/faq/</loc><priority>0.6</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/payment/</loc><priority>0.5</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/blog/</loc><priority>0.7</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/blog/what-is-lippan-art-india/</loc><priority>0.6</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/blog/modern-lippan-wall-decor-ideas/</loc><priority>0.6</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/blog/lippan-art-vs-warli-art/</loc><priority>0.6</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/blog/lippan-art-gift-guide/</loc><priority>0.6</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/blog/how-to-display-lippan-art-home/</loc><priority>0.6</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/mountain-vista/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/midnight-solitude/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/forest-canopy/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/golden-pastoral/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/ethereal-mist/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/earthen-flow/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/textured-rhythms/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/golden-cascade/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/mirror-mandala/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/geometric-radiance/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/urban-layers/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/modern-symmetry/</loc><priority>0.8</priority></url>
-  <url><loc>https://pankajjjat.github.io/Art/product/ornate-opulence/</loc><priority>0.8</priority></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  <url>
+    <loc>https://pankajjjat.github.io/Art/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/shipping/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/faq/</loc>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/payment/</loc>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/blog/</loc>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/blog/what-is-lippan-art-india/</loc>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/blog-lippan-intro.jpg</image:loc>
+      <image:title>What Is Lippan Art? India's Ancient Mirror Craft Explained</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/blog/modern-lippan-wall-decor-ideas/</loc>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/blog-lippan-decor.jpg</image:loc>
+      <image:title>Modern Lippan Wall Decor: 7 Stunning Ideas for Your Home</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/blog/lippan-art-vs-warli-art/</loc>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/blog-lippan-vs-warli.png</image:loc>
+      <image:title>Lippan Art vs Warli Art: Key Differences Every Art Lover Should Know</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/blog/lippan-art-gift-guide/</loc>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/blog-gift-guide.jpg</image:loc>
+      <image:title>Lippan Art Gift Guide: 5 Unique Indian Handicraft Gifts for Every Occasion</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/blog/how-to-display-lippan-art-home/</loc>
+    <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/blog-display-guide.jpg</image:loc>
+      <image:title>How to Display Lippan Art in Your Home: A Complete Guide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/mountain-vista/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/landscapes_1.jpg</image:loc>
+      <image:title>Mountain Vista — Landscapes by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/midnight-solitude/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/landscapes_5.jpg</image:loc>
+      <image:title>Midnight Solitude — Landscapes by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/forest-canopy/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/landscapes_9.jpg</image:loc>
+      <image:title>Forest Canopy — Landscapes by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/golden-pastoral/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/landscapes_13.jpg</image:loc>
+      <image:title>Golden Pastoral — Landscapes by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/ethereal-mist/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/abstract_2.jpg</image:loc>
+      <image:title>Ethereal Mist — Abstract by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/earthen-flow/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/abstract_3.jpg</image:loc>
+      <image:title>Earthen Flow — Abstract by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/textured-rhythms/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/abstract_7.jpg</image:loc>
+      <image:title>Textured Rhythms — Abstract by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/golden-cascade/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/abstract_11.jpg</image:loc>
+      <image:title>Golden Cascade — Abstract by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/mirror-mandala/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/lippan-art_6.jpg</image:loc>
+      <image:title>Mirror Mandala — Lippan Art by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/geometric-radiance/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/lippan-art_10.jpg</image:loc>
+      <image:title>Geometric Radiance — Lippan Art by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/urban-layers/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/modern-art_4.jpg</image:loc>
+      <image:title>Urban Layers — Modern Art by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/modern-symmetry/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/modern-art_8.jpg</image:loc>
+      <image:title>Modern Symmetry — Modern Art by MITTI</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://pankajjjat.github.io/Art/product/ornate-opulence/</loc>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://pankajjjat.github.io/Art/images/optimized/wall-decor_12.jpg</image:loc>
+      <image:title>Ornate Opulence — Wall Decor by MITTI</image:title>
+    </image:image>
+  </url>
 </urlset>
