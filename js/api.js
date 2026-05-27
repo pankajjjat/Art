@@ -14,7 +14,7 @@ const MITTI_API = (function() {
 
   // ─── CONFIG ──────────────────────────────────────────────────────────────
   // 🔽 REPLACE THIS with your deployed Google Apps Script Web App URL:
-  const API_BASE = 'https://script.google.com/macros/s/AKfycbzkCiuErQFp0yPkysq3k518pjFSJ-n0bbT7abZ1ibHql45zAouGjeC1-y7mvyjnKcMFQg/exec';
+  const API_BASE = 'https://script.google.com/macros/s/AKfycbyJZgQbFCOEHdtp6Wp83MYpJCbXWmKPmxkLD-R28b0MZcSeZTTJkau92czRNkVQZnnMMA/exec';
 
   // Fallback: if API is unreachable, load from local JSON files
   // This lets the site work even offline / during initial setup
