@@ -1,0 +1,38 @@
+name: Build & Deploy MITTI
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate static pages
+        run: python scripts/generate-pages-fixed.py
+
+      - name: Commit generated files
+        run: |
+          git config --local user.name "MITTI Bot"
+          git config --local user.email "bot@mittiart.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "Auto-build: regenerate pages from CMS data"
+
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

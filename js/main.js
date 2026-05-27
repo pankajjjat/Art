@@ -165,7 +165,14 @@
       info.innerHTML =
         '<div class="gallery-card-category">' + product.category.replace('-', ' ') + '</div>' +
         '<div class="gallery-card-name">' + product.name + '</div>' +
-        '<div class="gallery-card-price">' + formatPrice(product.price) + '</div>';
+        '<div class="gallery-card-price">' + formatPrice(product.price) + '</div>' +
+        (product.inStock === false ? '<div class="gallery-card-stock">Out of Stock</div>' : '');
+
+      // Grey out the card if out of stock
+      if (product.inStock === false) {
+        card.style.opacity = '0.65';
+        imgWrap.style.filter = 'grayscale(0.7)';
+      }
 
       card.appendChild(imgWrap);
       card.appendChild(info);
@@ -321,8 +328,21 @@
     $('#lbPrice').textContent = formatPrice(product.price);
     $('#lbDimensions').textContent = product.dimensions;
     $('#lbDescription').textContent = product.description;
-    if ($('#lbAddBtn')) {
-      $('#lbAddBtn').onclick = function() { addToCart(product); };
+    var lbAddBtn = $('#lbAddBtn');
+    if (lbAddBtn) {
+      if (product.inStock === false) {
+        lbAddBtn.textContent = 'Currently Unavailable';
+        lbAddBtn.disabled = true;
+        lbAddBtn.style.opacity = '0.5';
+        lbAddBtn.style.cursor = 'not-allowed';
+        lbAddBtn.onclick = null;
+      } else {
+        lbAddBtn.textContent = 'Add to collection';
+        lbAddBtn.disabled = false;
+        lbAddBtn.style.opacity = '1';
+        lbAddBtn.style.cursor = 'pointer';
+        lbAddBtn.onclick = function() { addToCart(product); };
+      }
     }
 
     lb.classList.add('open');
@@ -405,6 +425,10 @@
   }
 
   window.addToCart = function(product) {
+    if (product.inStock === false) {
+      showToast('This piece is currently unavailable');
+      return;
+    }
     cart.push({ id: product.id, name: product.name, price: product.price, image: product.imageFallback || product.image });
     localStorage.setItem('mitti-cart', JSON.stringify(cart));
     updateCartUI();

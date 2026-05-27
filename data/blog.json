@@ -1,0 +1,57 @@
+[
+  {
+    "id": 1,
+    "title": "What Is Lippan Art? India's Ancient Mirror Craft Explained",
+    "slug": "what-is-lippan-art-india",
+    "category": "Lippan Art",
+    "readTime": 6,
+    "date": "Jan 15, 2026",
+    "excerpt": "Discover the centuries-old tradition of Lippan Art — the mud-and-mirror craft from Kutch, Gujarat. Learn how this ancient technique is being reimagined for modern Indian homes.",
+    "image": "blog-lippan-intro.jpg",
+    "svg": "blog-lippan-intro.svg"
+  },
+  {
+    "id": 2,
+    "title": "Modern Lippan Wall Decor: 7 Stunning Ideas for Your Home",
+    "slug": "modern-lippan-wall-decor-ideas",
+    "category": "Home Decor",
+    "readTime": 8,
+    "date": "Jan 22, 2026",
+    "excerpt": "From minimalist white-and-gold compositions to bold terracotta statements — explore 7 modern lippan wall decor ideas that transform any room into a gallery.",
+    "image": "blog-lippan-decor.jpg",
+    "svg": "blog-lippan-decor.svg"
+  },
+  {
+    "id": 3,
+    "title": "Lippan Art vs Warli Art: Key Differences Every Art Lover Should Know",
+    "slug": "lippan-art-vs-warli-art",
+    "category": "Art Guide",
+    "readTime": 5,
+    "date": "Feb 1, 2026",
+    "excerpt": "Two of India’s most beloved folk art forms — Lippan and Warli — explained. Materials, techniques, origins, and which one suits your space better.",
+    "image": "blog-lippan-vs-warli.jpg",
+    "svg": "blog-lippan-vs-warli.svg"
+  },
+  {
+    "id": 4,
+    "title": "How to Display Lippan Art in Your Home: A Complete Guide",
+    "slug": "how-to-display-lippan-art-home",
+    "category": "Home Decor",
+    "readTime": 7,
+    "date": "Feb 10, 2026",
+    "excerpt": "Lighting, placement, framing, and pairing tips for lippan art. Make your mirror-work pieces shine with these expert display strategies.",
+    "image": "blog-display-guide.jpg",
+    "svg": "blog-display-guide.svg"
+  },
+  {
+    "id": 5,
+    "title": "Lippan Art Gift Guide: 5 Unique Indian Handicraft Gifts for Every Occasion",
+    "slug": "lippan-art-gift-guide",
+    "category": "Gifting",
+    "readTime": 6,
+    "date": "Feb 18, 2026",
+    "excerpt": "Looking for a meaningful gift? From housewarming to weddings — lippan art pieces make unforgettable, handcrafted presents that tell a story.",
+    "image": "blog-gift-guide.jpg",
+    "svg": "blog-gift-guide.svg"
+  }
+]

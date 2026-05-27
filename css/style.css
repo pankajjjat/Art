@@ -605,6 +605,30 @@ a:hover { color: var(--ochre); }
   color: var(--text-muted);
 }
 
+.gallery-card-stock {
+  font-size: 0.75rem;
+  color: var(--accent-gold);
+  font-weight: 500;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.out-of-stock-badge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(180, 90, 30, 0.9);
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-radius: 4px;
+  z-index: 2;
+}
+
 /* ----- Featured Section ----- */
 .featured-section {
   background: rgba(58, 48, 40, 0.3);
@@ -1362,6 +1386,7 @@ a:hover { color: var(--ochre); }
   border-radius: var(--radius);
   overflow: hidden;
   background: var(--clay-mid);
+  position: relative;
 }
 
 .product-detail-image img {

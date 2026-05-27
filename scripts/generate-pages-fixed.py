@@ -1,101 +1,162 @@
-"""Regenerate all product pages, blog posts, and static pages for MITTI website."""
+"""Regenerate all product pages, blog posts, and static pages for MITTI website.
+Reads from data/*.json as the single source of truth. Supports inStock flag."""
 import json, os, re
 
-BASE = "C:/Users/panka/OneDrive/Desktop/Project/mitti-website"
+BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Full product data matching products.js EXACTLY including image paths
-products = [
-  {"id":1,"name":"Mountain Vista","slug":"mountain-vista","category":"landscapes","price":12999,"description":"A breathtaking panoramic landscape capturing the golden hour over majestic mountain peaks and serene waters — where earth meets sky in perfect stillness.","dimensions":"30\" × 40\"","cat_clean":"Landscapes","image":"abstract_11.jpg","svg":"mountain-vista.svg"},
-  {"id":2,"name":"Midnight Solitude","slug":"midnight-solitude","category":"landscapes","price":8999,"description":"A moody nocturnal landscape bathed in moonlight, evoking a sense of quiet contemplation and mystery. The stars mirror the stillness within.","dimensions":"24\" × 36\"","cat_clean":"Landscapes","image":"landscapes_5.jpg","svg":"midnight-solitude.svg"},
-  {"id":3,"name":"Forest Canopy","slug":"forest-canopy","category":"landscapes","price":10999,"description":"Sunlight filtering through a dense forest canopy, painting the forest floor in dappled gold and emerald — nature's own stained glass.","dimensions":"28\" × 36\"","cat_clean":"Landscapes","image":"landscapes_9.jpg","svg":"forest-canopy.svg"},
-  {"id":4,"name":"Golden Pastoral","slug":"golden-pastoral","category":"landscapes","price":7499,"description":"A warm pastoral scene bathed in golden sunlight — rolling fields and gentle skies captured at the perfect hour when the world turns to amber.","dimensions":"20\" × 28\"","cat_clean":"Landscapes","image":"landscapes_13.jpg","svg":"golden-pastoral.svg"},
-  {"id":5,"name":"Monsoon Mountains","slug":"monsoon-mountains","category":"landscapes","price":11999,"description":"Lush green Western Ghats landscape with mist rolling through valleys. An ode to India's monsoon beauty — layer upon layer of misty blue-green mountains.","dimensions":"24\" × 36\"","cat_clean":"Landscapes","image":"landscape-monsoon.jpg","svg":"monsoon-mountains.svg"},
-  {"id":6,"name":"Sacred Ganga","slug":"sacred-ganga","category":"landscapes","price":13999,"description":"A serene depiction of the Ganga at dawn — soft pastels, gentle ripples, and the first light over Haridwar's ghats. A meditation in paint.","dimensions":"30\" × 40\"","cat_clean":"Landscapes","image":"landscape-ganga.jpg","svg":"sacred-ganga.svg"},
-  {"id":7,"name":"Desert Solitude","slug":"desert-solitude","category":"landscapes","price":9999,"description":"Rajasthan's Thar Desert in golden hour — endless dunes, a single camel silhouette, and a sky on fire. The raw beauty of the desert at sunset.","dimensions":"24\" × 36\"","cat_clean":"Landscapes","image":"landscape-desert.jpg","svg":"desert-solitude.svg"},
-  {"id":8,"name":"Ethereal Mist","slug":"ethereal-mist","category":"abstract","price":6999,"description":"A soft, minimalist abstract composition where muted tones blend like morning mist over still waters — quiet, contemplative, essential.","dimensions":"18\" × 24\"","cat_clean":"Abstract","image":"abstract_2.jpg","svg":"ethereal-mist.svg"},
-  {"id":9,"name":"Earthen Flow","slug":"earthen-flow","category":"abstract","price":8499,"description":"Warm earth tones converge in flowing organic patterns, inspired by natural textures and geological formations carved over millennia.","dimensions":"24\" × 30\"","cat_clean":"Abstract","image":"abstract_3.jpg","svg":"earthen-flow.svg"},
-  {"id":10,"name":"Textured Rhythms","slug":"textured-rhythms","category":"abstract","price":9999,"description":"A richly textured abstract piece where layered vertical rhythms create depth, movement, and visual intrigue — a meditation in monochrome.","dimensions":"28\" × 36\"","cat_clean":"Abstract","image":"abstract_7.jpg","svg":"textured-rhythms.svg"},
-  {"id":11,"name":"Golden Cascade","slug":"golden-cascade","category":"abstract","price":14999,"description":"A luminous golden abstract where cascading warm tones meet subtle texture — a statement piece that transforms any space with its quiet radiance.","dimensions":"36\" × 48\"","cat_clean":"Abstract","image":"abstract_11.jpg","svg":"golden-cascade.svg"},
-  {"id":12,"name":"Crimson Horizon","slug":"crimson-horizon","category":"abstract","price":18999,"description":"A bold abstract composition in deep crimson and gold, with textured impasto strokes that catch light dramatically — a statement of passion.","dimensions":"36\" × 48\"","cat_clean":"Abstract","image":"abstract-crimson.jpg","svg":"crimson-horizon.svg"},
-  {"id":13,"name":"Earthy Resonance","slug":"earthy-resonance","category":"abstract","price":14999,"description":"Textural abstract in layered earth tones — ochre, umber, and clay white. Organic forms that evoke soil, stone, and sediment.","dimensions":"30\" × 40\"","cat_clean":"Abstract","image":"abstract-earthy.jpg","svg":"earthy-resonance.svg"},
-  {"id":14,"name":"Mirror Mandala","slug":"mirror-mandala","category":"lippan-art","price":5999,"description":"Intricate handcrafted lippan art featuring a traditional mandala pattern with embedded mirror work that catches and reflects light beautifully.","dimensions":"18\" × 18\"","cat_clean":"Lippan Art","image":"lippan-art_6.jpg","svg":"mirror-mandala.svg"},
-  {"id":15,"name":"Geometric Radiance","slug":"geometric-radiance","category":"lippan-art","price":7499,"description":"A contemporary lippan art piece blending traditional mirror inlay with bold geometric patterns — a brilliant fusion of heritage and modern design.","dimensions":"24\" × 24\"","cat_clean":"Lippan Art","image":"lippan-art_10.jpg","svg":"geometric-radiance.svg"},
-  {"id":16,"name":"Modern Lippan Mandala","slug":"modern-lippan-mandala","category":"lippan-art","price":12999,"description":"A stunning modern interpretation of traditional Kutch lippan art. Intricate mirror work embedded in white clay on a deep indigo canvas.","dimensions":"30\" × 40\"","cat_clean":"Lippan Art","image":"lippan-mandala.jpg","svg":"modern-lippan-mandala.svg"},
-  {"id":17,"name":"Traditional Kutch Geometric","slug":"traditional-kutch-geometric","category":"lippan-art","price":8999,"description":"Authentic Kutch-inspired geometric patterns with embedded mirrors on a warm terracotta clay base. Pure earthy elegance rooted in tradition.","dimensions":"24\" × 36\"","cat_clean":"Lippan Art","image":"lippan-geometric.jpg","svg":"traditional-kutch-geometric.svg"},
-  {"id":18,"name":"White & Gold Celestial","slug":"white-gold-celestial","category":"lippan-art","price":15999,"description":"Luxurious white-and-gold lippan art depicting celestial motifs. Gold-leaf accents elevate traditional craft into modern luxury.","dimensions":"36\" × 48\"","cat_clean":"Lippan Art","image":"lippan-celestial.jpg","svg":"white-gold-celestial.svg"},
-  {"id":19,"name":"Terracotta & Teal Harmony","slug":"terracotta-teal-harmony","category":"lippan-art","price":7499,"description":"A vibrant fusion of warm terracotta clay and cool teal accents. Modern lippan art reimagined with contemporary color blocking.","dimensions":"18\" × 24\"","cat_clean":"Lippan Art","image":"lippan-terracotta.jpg","svg":"terracotta-teal-harmony.svg"},
-  {"id":20,"name":"Abstract Lippan Fusion","slug":"abstract-lippan-fusion","category":"lippan-art","price":10999,"description":"Where abstract expressionism meets traditional lippan craft. Fluid clay forms with scattered mirrors create an ever-changing visual experience.","dimensions":"30\" × 30\"","cat_clean":"Lippan Art","image":"lippan-abstract.jpg","svg":"abstract-lippan-fusion.svg"},
-  {"id":21,"name":"Custom Name Lippan Art","slug":"custom-name-lippan","category":"lippan-art","price":5999,"description":"Personalized lippan art with your name, family name, or mantra — handcrafted in clay and mirrors. A one-of-a-kind gift that tells your story.","dimensions":"12\" × 18\"","cat_clean":"Lippan Art","image":"lippan-custom.jpg","svg":"custom-name-lippan.svg"},
-  {"id":22,"name":"Urban Layers","slug":"urban-layers","category":"modern-art","price":11999,"description":"An evocative cityscape where layered architectural forms and geometric compositions capture the restless energy of urban life.","dimensions":"30\" × 40\"","cat_clean":"Modern Art","image":"modern-art_4.jpg","svg":"urban-layers.svg"},
-  {"id":23,"name":"Modern Symmetry","slug":"modern-symmetry","category":"modern-art","price":9999,"description":"Clean lines and balanced architectural forms create a meditative modern art piece that brings sophisticated calm to any interior.","dimensions":"24\" × 36\"","cat_clean":"Modern Art","image":"modern-art_8.jpg","svg":"modern-symmetry.svg"},
-  {"id":24,"name":"Urban Geometry","slug":"urban-geometry","category":"modern-art","price":21999,"description":"A bold modern composition exploring the geometry of Indian urban architecture — balconies, jaali patterns, windows, and dancing shadows.","dimensions":"48\" × 36\"","cat_clean":"Modern Art","image":"modern-urban.jpg","svg":"urban-geometry.svg"},
-  {"id":25,"name":"Minimalist Lotus","slug":"minimalist-lotus","category":"modern-art","price":15999,"description":"Clean, contemporary line art of a blooming lotus. Single continuous stroke style on textured paper — framed in minimalist elegance.","dimensions":"24\" × 36\"","cat_clean":"Modern Art","image":"modern-lotus.jpg","svg":"minimalist-lotus.svg"},
-  {"id":26,"name":"Ornate Opulence","slug":"ornate-opulence","category":"wall-decor","price":18999,"description":"A stunning decorative piece with rich golden tones and intricate ornamental detailing — designed to become the crown jewel of your wall.","dimensions":"36\" × 48\"","cat_clean":"Wall Decor","image":"wall-decor_12.jpg","svg":"ornate-opulence.svg"},
-  {"id":27,"name":"Set of 3 — Earth Triptych","slug":"set-of-3-earth-triptych","category":"wall-decor","price":24999,"description":"A trio of textured abstract landscapes — earth, water, and sky — designed to span an entire wall with seamless flow across three panels.","dimensions":"3 x 24\" × 36\"","cat_clean":"Wall Decor","image":"wall-triptych.jpg","svg":"set-of-3-earth-triptych.svg"},
-  {"id":28,"name":"Mandala Metal Wall Art","slug":"mandala-metal-wall-art","category":"wall-decor","price":6999,"description":"Laser-cut mandala in powder-coated iron with a hand-patinated copper finish. Intricate geometric pattern casts stunning shadow plays on your wall.","dimensions":"24\" diameter","cat_clean":"Wall Decor","image":"wall-mandala.jpg","svg":"mandala-metal-wall-art.svg"},
-]
+# Load data from JSON files (single source of truth)
+with open(os.path.join(BASE, "data", "products.json"), "r", encoding="utf-8") as f:
+    products = json.load(f)
 
-# Blog data matching products.js
-blog_posts_data = [
-    {"id":1,"title":"What Is Lippan Art? India's Ancient Mirror Craft Explained","slug":"what-is-lippan-art-india","category":"Lippan Art","readTime":6,"date":"Jan 15, 2026","excerpt":"Discover the centuries-old tradition of Lippan Art — the mud-and-mirror craft from Kutch, Gujarat. Learn how this ancient technique is being reimagined for modern Indian homes.","image":"blog-lippan-intro.jpg","svg":"blog-lippan-intro.svg"},
-    {"id":2,"title":"Modern Lippan Wall Decor: 7 Stunning Ideas for Your Home","slug":"modern-lippan-wall-decor-ideas","category":"Home Decor","readTime":8,"date":"Jan 22, 2026","excerpt":"From minimalist white-and-gold compositions to bold terracotta statements — explore 7 modern lippan wall decor ideas that transform any room into a gallery.","image":"blog-lippan-decor.jpg","svg":"blog-lippan-decor.svg"},
-    {"id":3,"title":"Lippan Art vs Warli Art: Key Differences Every Art Lover Should Know","slug":"lippan-art-vs-warli-art","category":"Art Guide","readTime":5,"date":"Feb 1, 2026","excerpt":"Two of India's most beloved folk art forms — Lippan and Warli — explained. Materials, techniques, origins, and which one suits your space better.","image":"blog-lippan-vs-warli.jpg","svg":"blog-lippan-vs-warli.svg"},
-    {"id":4,"title":"How to Display Lippan Art in Your Home: A Complete Guide","slug":"how-to-display-lippan-art-home","category":"Home Decor","readTime":7,"date":"Feb 10, 2026","excerpt":"Lighting, placement, framing, and pairing tips for lippan art. Make your mirror-work pieces shine with these expert display strategies.","image":"blog-display-guide.jpg","svg":"blog-display-guide.svg"},
-    {"id":5,"title":"Lippan Art Gift Guide: 5 Unique Indian Handicraft Gifts for Every Occasion","slug":"lippan-art-gift-guide","category":"Gifting","readTime":6,"date":"Feb 18, 2026","excerpt":"Looking for a meaningful gift? From housewarming to weddings — lippan art pieces make unforgettable, handcrafted presents that tell a story.","image":"blog-gift-guide.jpg","svg":"blog-gift-guide.svg"},
-]
+with open(os.path.join(BASE, "data", "blog.json"), "r", encoding="utf-8") as f:
+    blog_posts_data = json.load(f)
+
+with open(os.path.join(BASE, "data", "settings.json"), "r", encoding="utf-8") as f:
+    settings = json.load(f)
 
 def fmt_price(n):
     s = "{:,}".format(n)
     return "\u20B9" + s
 
+# ===== REGENERATE js/products.js FROM JSON =====
+def write_products_js():
+    lines = []
+    lines.append("// ===== MITTI (\u092e\u093f\u091f\u094d\u091f\u0940) — Product Catalog (auto-generated from data/products.json) =====")
+    lines.append("// JPG-primary architecture with DOM-based SVG fallback")
+    lines.append("// Fallback chain: JPG → SVG → category gradient placeholder")
+    lines.append("")
+    lines.append("const products = [")
+
+    for p in products:
+        slug_id = p["slug"].replace("-", "")
+        in_stock = p.get("inStock", True)
+        featured_str = "true" if p.get("featured", False) else "false"
+        price = p["price"]
+        desc = p["description"].replace("'", "\\'").replace('"', '\\"')
+        dimensions = p["dimensions"].replace("'", "\\'")
+        image_path = "images/optimized/" + p["image"]
+        fallback_path = "images/svg/" + p["svg"]
+
+        lines.append("  {")
+        lines.append(f'    id: {p["id"]}, name: "{p["name"]}", slug: "{p["slug"]}", category: "{p["category"]}",')
+        lines.append(f'    price: {price},')
+        lines.append(f'    description: "{desc}",')
+        lines.append(f'    image: "{image_path}",')
+        lines.append(f'    imageFallback: "{fallback_path}",')
+        lines.append(f'    featured: {featured_str}, dimensions: \'{dimensions}\', inStock: {str(in_stock).lower()}')
+        lines.append("  },")
+
+    lines.append("];")
+    lines.append("")
+    lines.append("// Categories metadata (auto-generated)")
+    cat_counts = {}
+    cat_images = {}
+    for p in products:
+        cat = p["category"]
+        cat_counts[cat] = cat_counts.get(cat, 0) + 1
+        if cat not in cat_images:
+            cat_images[cat] = "images/optimized/" + p["image"]
+
+    cat_display = {
+        "landscapes": "Landscapes", "abstract": "Abstract",
+        "lippan-art": "Lippan Art", "modern-art": "Modern Art",
+        "wall-decor": "Wall Decor"
+    }
+
+    lines.append("const categories = [")
+    for cat_id, count in cat_counts.items():
+        display = cat_display.get(cat_id, cat_id.replace("-", " ").title())
+        lines.append(f'  {{ id: "{cat_id}", name: "{display}", count: {count}, image: "{cat_images[cat_id]}" }},')
+    lines.append("];")
+    lines.append("")
+    lines.append("// Blog posts (auto-generated)")
+    lines.append("const blogPosts = [")
+    for bp in blog_posts_data:
+        lines.append("  {")
+        lines.append(f'    id: {bp["id"]},')
+        lines.append(f'    title: "{bp["title"]}",')
+        lines.append(f'    slug: "{bp["slug"]}",')
+        lines.append(f'    url: "blog/{bp["slug"]}/",')
+        lines.append(f'    category: "{bp["category"]}",')
+        lines.append(f'    readTime: {bp["readTime"]},')
+        lines.append(f'    date: "{bp["date"]}",')
+        lines.append(f'    excerpt: "{bp["excerpt"]}",')
+        lines.append(f'    image: "images/optimized/{bp["image"]}",')
+        lines.append(f'    imageFallback: "images/svg/{bp["svg"]}"')
+        lines.append("  },")
+    lines.append("];")
+
+    out = "\n".join(lines)
+    js_path = os.path.join(BASE, "js", "products.js")
+    with open(js_path, "w", encoding="utf-8") as f:
+        f.write(out)
+    print(f"OK js/products.js ({len(products)} products, {len(blog_posts_data)} blog posts)")
+
+write_products_js()
+
+# ===== SOCIAL LINKS FROM SETTINGS =====
+social = settings.get("social", {})
+insta_url = social.get("instagram", "#")
+fb_url = social.get("facebook", "#")
+pin_url = social.get("pinterest", "#")
+
+# ===== PRODUCT PAGES =====
 for p in products:
     jpg = p["image"]
     svg = p["svg"]
+    in_stock = p.get("inStock", True)
     pdir = os.path.join(BASE, "product", p["slug"])
     os.makedirs(pdir, exist_ok=True)
 
     cat_lower = p["category"].replace("-", " ")
-    canonical = "https://mittiart.com/product/{}/".format(p['slug'])
+    canonical = f"https://mittiart.com/product/{p['slug']}/"
 
-    add_to_cart_html = '<button class="btn btn-primary" onclick="addToCart({id:' + str(p['id']) + ",name:'" + p['name'].replace("'", "\\'") + "',price:" + str(p['price']) + ",image:'../images/optimized/" + jpg + "'})" + '">Add to collection</button>'
+    # Build the action button & stock badge
+    if in_stock:
+        stock_badge = ""
+        action_btn = f'<button class="btn btn-primary" onclick="addToCart({{id:{p["id"]},name:\'{p["name"]}\',price:{p["price"]},image:\'../images/optimized/{jpg}\'}})\">Add to collection</button>'
+        schema_avail = "https://schema.org/InStock"
+    else:
+        stock_badge = '<div class="out-of-stock-badge">Out of Stock</div>'
+        action_btn = '<button class="btn btn-secondary" disabled style="opacity:0.5;cursor:not-allowed">Currently Unavailable</button>'
+        schema_avail = "https://schema.org/OutOfStock"
 
-    # Build JSON-LD product schema
     schema_name = p['name'].replace('"', '\\"')
     schema_desc = p['description'].replace('"', '\\"')
 
-    html = '''<!DOCTYPE html>
+    html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>''' + p['name'] + ''' — MITTI Art Gallery | ''' + p['cat_clean'] + '''</title>
-  <meta name="description" content="''' + p['description'][:120] + '''" />
-  <link rel="canonical" href="''' + canonical + '''" />
-  <meta property="og:title" content="''' + p['name'] + ''' — MITTI Art Gallery" />
-  <meta property="og:description" content="''' + p['description'][:120] + '''" />
+  <title>{p['name']} — MITTI Art Gallery | {p['cat_clean']}</title>
+  <meta name="description" content="{p['description'][:120]}" />
+  <link rel="canonical" href="{canonical}" />
+  <meta property="og:title" content="{p['name']} — MITTI Art Gallery" />
+  <meta property="og:description" content="{p['description'][:120]}" />
   <meta property="og:type" content="product" />
-  <meta property="og:url" content="''' + canonical + '''" />
-  <meta property="og:image" content="https://mittiart.com/images/optimized/''' + jpg + '''" />
+  <meta property="og:url" content="{canonical}" />
+  <meta property="og:image" content="https://mittiart.com/images/optimized/{jpg}" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="''' + p['name'] + ''' — MITTI Art Gallery" />
-  <meta name="twitter:description" content="''' + p['description'][:120] + '''" />
-  <meta name="twitter:image" content="https://mittiart.com/images/optimized/''' + jpg + '''" />
+  <meta name="twitter:title" content="{p['name']} — MITTI Art Gallery" />
+  <meta name="twitter:description" content="{p['description'][:120]}" />
+  <meta name="twitter:image" content="https://mittiart.com/images/optimized/{jpg}" />
   <script type="application/ld+json">
-  {
+  {{
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": "''' + schema_name + '''",
-    "description": "''' + schema_desc + '''",
-    "image": "https://mittiart.com/images/optimized/''' + jpg + '''",
-    "category": "''' + p['cat_clean'] + '''",
-    "offers": {
+    "name": "{schema_name}",
+    "description": "{schema_desc}",
+    "image": "https://mittiart.com/images/optimized/{jpg}",
+    "category": "{p['cat_clean']}",
+    "offers": {{
       "@type": "Offer",
-      "price": "''' + str(p['price']) + '''",
+      "price": "{p['price']}",
       "priceCurrency": "INR",
-      "availability": "https://schema.org/InStock",
-      "url": "''' + canonical + '''"
-    }
-  }
+      "availability": "{schema_avail}",
+      "url": "{canonical}"
+    }}
+  }}
   </script>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="../favicon.svg" />
@@ -121,24 +182,25 @@ for p in products:
     <div class="container">
       <div class="product-detail">
         <div class="product-detail-image">
-          <img id="mainProductImg" src="../images/optimized/''' + jpg + '''" alt="''' + p['name'] + ' - ' + p['cat_clean'] + ''' by MITTI" />
+          {stock_badge}
+          <img id="mainProductImg" src="../images/optimized/{jpg}" alt="{p['name']} - {p['cat_clean']} by MITTI" />
         </div>
         <div class="product-detail-info">
-          <div class="product-detail-category">''' + cat_lower + '''</div>
-          <h1 class="product-detail-name">''' + p['name'] + '''</h1>
-          <div class="product-detail-price">''' + fmt_price(p['price']) + '''</div>
-          <div class="product-detail-dimensions">''' + p['dimensions'] + '''</div>
-          <p class="product-detail-desc">''' + p['description'] + '''</p>
+          <div class="product-detail-category">{cat_lower}</div>
+          <h1 class="product-detail-name">{p['name']}</h1>
+          <div class="product-detail-price">{fmt_price(p['price'])}</div>
+          <div class="product-detail-dimensions">{p['dimensions']}</div>
+          <p class="product-detail-desc">{p['description']}</p>
           <div class="product-detail-actions">
-            ''' + add_to_cart_html + '''
+            {action_btn}
             <a href="../#gallery" class="btn btn-secondary">Back to gallery</a>
           </div>
           <div class="product-detail-share">
             <span>Share</span>
-            <a href="https://www.facebook.com/sharer/sharer.php?u=''' + canonical + '''" target="_blank">Facebook</a>
-            <a href="https://twitter.com/intent/tweet?text=''' + p['name'] + ''' by MITTI&amp;url=''' + canonical + '''" target="_blank">Twitter</a>
-            <a href="https://pinterest.com/pin/create/button/?url=''' + canonical + '''&amp;media=https://mittiart.com/images/optimized/''' + jpg + '''&amp;description=''' + p['name'] + '''" target="_blank">Pinterest</a>
-            <a href="https://api.whatsapp.com/send?text=''' + p['name'] + ''' - ''' + canonical + '''" target="_blank">WhatsApp</a>
+            <a href="https://www.facebook.com/sharer/sharer.php?u={canonical}" target="_blank">Facebook</a>
+            <a href="https://twitter.com/intent/tweet?text={p['name']} by MITTI&amp;url={canonical}" target="_blank">Twitter</a>
+            <a href="https://pinterest.com/pin/create/button/?url={canonical}&amp;media=https://mittiart.com/images/optimized/{jpg}&amp;description={p['name']}" target="_blank">Pinterest</a>
+            <a href="https://api.whatsapp.com/send?text={p['name']} - {canonical}" target="_blank">WhatsApp</a>
           </div>
         </div>
       </div>
@@ -154,7 +216,7 @@ for p in products:
         </div>
         <div><h4>Explore</h4><ul class="footer-links"><li><a href="../#gallery">Gallery</a></li><li><a href="../#categories">Categories</a></li><li><a href="../#featured">Featured</a></li><li><a href="../blog/">Blog</a></li></ul></div>
         <div><h4>Support</h4><ul class="footer-links"><li><a href="../faq/">FAQ</a></li><li><a href="../shipping/">Shipping</a></li><li><a href="../payment/">Payment</a></li><li><a href="../#contact">Contact</a></li></ul></div>
-        <div><h4>Connect</h4><ul class="footer-links"><li><a href="https://www.instagram.com/saumya.chaurasia04?igsh=MXZqc2xlZDV2YWdiaQ==">Instagram</a></li><li><a href="https://www.facebook.com/profile.php?id=100077641696027">Facebook</a></li><li><a href="https://pinterest.com/mittiart">Pinterest</a></li></ul></div>
+        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li><li><a href="{pin_url}">Pinterest</a></li></ul></div>
       </div>
       <div class="footer-bottom">&copy; 2026 MITTI Art Gallery. Made with earth in India.</div>
     </div>
@@ -164,17 +226,17 @@ for p in products:
   <script src="../js/products.js"></script>
   <script src="../js/main.js"></script>
   <script>
-    (function() {
+    (function() {{
       var img = document.getElementById('mainProductImg');
       var fbIdx = 0;
-      var fbSources = ['../images/optimized/''' + jpg + '''', '../images/svg/''' + svg + ''''];
-      img.onerror = function() {
+      var fbSources = ['../images/optimized/{jpg}', '../images/svg/{svg}'];
+      img.onerror = function() {{
         fbIdx++;
-        if (fbIdx === 1 && fbSources[1]) { this.src = fbSources[1]; }
-        else {
+        if (fbIdx === 1 && fbSources[1]) {{ this.src = fbSources[1]; }}
+        else {{
           this.style.display = 'none';
           var parent = this.parentNode;
-          if (parent) {
+          if (parent) {{
             parent.style.background = '#3A3028';
             parent.style.minHeight = '300px';
             parent.style.display = 'flex';
@@ -182,22 +244,23 @@ for p in products:
             parent.style.justifyContent = 'center';
             var fbEl = document.createElement('div');
             fbEl.style.cssText = 'text-align:center;color:rgba(242,235,224,0.5);padding:40px;';
-            fbEl.innerHTML = '<div style="font-size:3rem;margin-bottom:12px;opacity:0.6;">&#127912;</div><div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;">''' + p['name'] + '''</div>';
+            fbEl.innerHTML = '<div style="font-size:3rem;margin-bottom:12px;opacity:0.6;">&#127912;</div><div style="font-size:0.85rem;text-transform:uppercase;letter-spacing:1px;">{p['name']}</div>';
             parent.appendChild(fbEl);
-          }
-        }
-      };
-    })();
+          }}
+        }}
+      }};
+    }})();
   </script>
 </body>
 </html>'''
 
     with open(os.path.join(pdir, "index.html"), "w", encoding="utf-8") as f:
         f.write(html)
-    print("OK product/{}/index.html".format(p['slug']))
+    stock_label = " [IN STOCK]" if in_stock else " [OUT OF STOCK]"
+    print(f"OK product/{p['slug']}/index.html{stock_label}")
 
 # ===== BLOG INDEX =====
-blog_index = '''<!DOCTYPE html>
+blog_index = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -210,13 +273,13 @@ blog_index = '''<!DOCTYPE html>
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://mittiart.com/blog/" />
   <script type="application/ld+json">
-  {
+  {{
     "@context": "https://schema.org",
     "@type": "Blog",
     "name": "MITTI Art Blog",
     "description": "Stories, guides, and inspiration from MITTI Art Gallery.",
     "url": "https://mittiart.com/blog/"
-  }
+  }}
   </script>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="../favicon.svg" />
@@ -249,7 +312,7 @@ blog_index = '''<!DOCTYPE html>
         <div class="footer-brand"><div class="footer-logo">MI<span>TTI</span></div><p class="footer-tagline">From earth, for the wall.</p></div>
         <div><h4>Explore</h4><ul class="footer-links"><li><a href="../#gallery">Gallery</a></li><li><a href="../blog/">Blog</a></li></ul></div>
         <div><h4>Support</h4><ul class="footer-links"><li><a href="../faq/">FAQ</a></li><li><a href="../shipping/">Shipping</a></li><li><a href="../payment/">Payment</a></li></ul></div>
-        <div><h4>Connect</h4><ul class="footer-links"><li><a href="https://www.instagram.com/saumya.chaurasia04?igsh=MXZqc2xlZDV2YWdiaQ==">Instagram</a></li><li><a href="https://www.facebook.com/profile.php?id=100077641696027">Facebook</a></li></ul></div>
+        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li></ul></div>
       </div>
       <div class="footer-bottom">&copy; 2026 MITTI Art Gallery.</div>
     </div>
@@ -419,42 +482,42 @@ blog_contents = {
 for bp in blog_posts_data:
     pdir = os.path.join(BASE, "blog", bp["slug"])
     os.makedirs(pdir, exist_ok=True)
-    content = blog_contents[bp["slug"]]
+    content = blog_contents.get(bp["slug"], "")
 
-    html = '''<!DOCTYPE html>
+    html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>''' + bp['title'] + ''' &mdash; MITTI Art Blog</title>
-  <meta name="description" content="''' + bp['excerpt'][:150] + '''" />
-  <link rel="canonical" href="https://mittiart.com/blog/''' + bp['slug'] + '''/" />
-  <meta property="og:title" content="''' + bp['title'] + '''" />
-  <meta property="og:description" content="''' + bp['excerpt'][:150] + '''" />
+  <title>{bp['title']} &mdash; MITTI Art Blog</title>
+  <meta name="description" content="{bp['excerpt'][:150]}" />
+  <link rel="canonical" href="https://mittiart.com/blog/{bp['slug']}/" />
+  <meta property="og:title" content="{bp['title']}" />
+  <meta property="og:description" content="{bp['excerpt'][:150]}" />
   <meta property="og:type" content="article" />
-  <meta property="og:url" content="https://mittiart.com/blog/''' + bp['slug'] + '''/" />
-  <meta property="og:image" content="https://mittiart.com/images/optimized/''' + bp['image'] + '''" />
+  <meta property="og:url" content="https://mittiart.com/blog/{bp['slug']}/" />
+  <meta property="og:image" content="https://mittiart.com/images/optimized/{bp['image']}" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="''' + bp['title'] + '''" />
-  <meta name="twitter:description" content="''' + bp['excerpt'][:150] + '''" />
-  <meta name="twitter:image" content="https://mittiart.com/images/optimized/''' + bp['image'] + '''" />
+  <meta name="twitter:title" content="{bp['title']}" />
+  <meta name="twitter:description" content="{bp['excerpt'][:150]}" />
+  <meta name="twitter:image" content="https://mittiart.com/images/optimized/{bp['image']}" />
   <script type="application/ld+json">
-  {
+  {{
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    "headline": "''' + bp['title'] + '''",
-    "description": "''' + bp['excerpt'][:150] + '''",
-    "image": "https://mittiart.com/images/optimized/''' + bp['image'] + '''",
-    "datePublished": "''' + bp['date'] + '''",
-    "author": {
+    "headline": "{bp['title']}",
+    "description": "{bp['excerpt'][:150]}",
+    "image": "https://mittiart.com/images/optimized/{bp['image']}",
+    "datePublished": "{bp['date']}",
+    "author": {{
       "@type": "Organization",
       "name": "MITTI Art Gallery"
-    },
-    "publisher": {
+    }},
+    "publisher": {{
       "@type": "Organization",
       "name": "MITTI Art Gallery"
-    }
-  }
+    }}
+  }}
   </script>
   <link rel="stylesheet" href="../../css/style.css" />
   <link rel="icon" href="../../favicon.svg" />
@@ -477,11 +540,11 @@ for bp in blog_posts_data:
 
   <article class="blog-post-page">
     <a href="../" class="blog-back">&larr; Back to blog</a>
-    <div class="blog-post-meta">''' + bp['date'] + ''' &middot; ''' + str(bp['readTime']) + ''' min read &middot; ''' + bp['category'] + '''</div>
-    <h1 class="blog-post-title">''' + bp['title'] + '''</h1>
-    <div class="blog-post-image"><img src="../../images/optimized/''' + bp['image'] + '''" alt="''' + bp['title'] + '''" loading="lazy" onerror="this.parentElement.style.background=\'var(--clay-mid)\';this.parentElement.style.minHeight=\'250px\';this.style.display=\'none\'" /></div>
+    <div class="blog-post-meta">{bp['date']} &middot; {bp['readTime']} min read &middot; {bp['category']}</div>
+    <h1 class="blog-post-title">{bp['title']}</h1>
+    <div class="blog-post-image"><img src="../../images/optimized/{bp['image']}" alt="{bp['title']}" loading="lazy" onerror="this.parentElement.style.background='var(--clay-mid)';this.parentElement.style.minHeight='250px';this.style.display='none'" /></div>
     <div class="blog-post-content">
-      ''' + content + '''
+      {content}
     </div>
     <a href="../" class="blog-back">&larr; Back to blog</a>
   </article>
@@ -492,7 +555,7 @@ for bp in blog_posts_data:
         <div class="footer-brand"><div class="footer-logo">MI<span>TTI</span></div><p class="footer-tagline">From earth, for the wall.</p></div>
         <div><h4>Explore</h4><ul class="footer-links"><li><a href="../../#gallery">Gallery</a></li><li><a href="../../blog/">Blog</a></li></ul></div>
         <div><h4>Support</h4><ul class="footer-links"><li><a href="../../faq/">FAQ</a></li><li><a href="../../shipping/">Shipping</a></li><li><a href="../../payment/">Payment</a></li></ul></div>
-        <div><h4>Connect</h4><ul class="footer-links"><li><a href="https://www.instagram.com/saumya.chaurasia04?igsh=MXZqc2xlZDV2YWdiaQ==">Instagram</a></li><li><a href="https://www.facebook.com/profile.php?id=100077641696027">Facebook</a></li></ul></div>
+        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li></ul></div>
       </div>
       <div class="footer-bottom">&copy; 2026 MITTI Art Gallery.</div>
     </div>
@@ -506,7 +569,7 @@ for bp in blog_posts_data:
 
     with open(os.path.join(pdir, "index.html"), "w", encoding="utf-8") as f:
         f.write(html)
-    print("OK blog/{}/index.html".format(bp['slug']))
+    print(f"OK blog/{bp['slug']}/index.html")
 
 # ===== STATIC PAGES =====
 pages = {
@@ -545,17 +608,20 @@ for slug, (title, qa_list) in pages.items():
     for q, a in qa_list:
         content_html += "<h2>" + q + "</h2>\n<p>" + a + "</p>\n"
 
-    html = '''<!DOCTYPE html>
+    page_title_short = title.split(" &mdash; ")[0]
+    meta_desc = {'faq': 'FAQ about MITTI Art Gallery', 'shipping': 'Shipping and delivery information for MITTI Art Gallery', 'payment': 'Payment methods and information for MITTI Art Gallery'}[slug]
+
+    html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>''' + title + ''' | MITTI Art Gallery</title>
-  <meta name="description" content="''' + ('FAQ about MITTI Art Gallery' if slug == 'faq' else 'Shipping and delivery information for MITTI Art Gallery' if slug == 'shipping' else 'Payment methods and information for MITTI Art Gallery') + '''." />
-  <link rel="canonical" href="https://mittiart.com/''' + slug + '''/" />
-  <meta property="og:title" content="''' + title + '''" />
+  <title>{title} | MITTI Art Gallery</title>
+  <meta name="description" content="{meta_desc}." />
+  <link rel="canonical" href="https://mittiart.com/{slug}/" />
+  <meta property="og:title" content="{title}" />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://mittiart.com/''' + slug + '''/" />
+  <meta property="og:url" content="https://mittiart.com/{slug}/" />
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="icon" href="../favicon.svg" />
 </head>
@@ -576,8 +642,8 @@ for slug, (title, qa_list) in pages.items():
   </nav>
 
   <main class="static-page">
-    <h1>''' + title.split(" &mdash; ")[0] + '''</h1>
-    ''' + content_html + '''
+    <h1>{page_title_short}</h1>
+    {content_html}
     <a href="../" class="blog-back">&larr; Back to home</a>
   </main>
 
@@ -587,7 +653,7 @@ for slug, (title, qa_list) in pages.items():
         <div class="footer-brand"><div class="footer-logo">MI<span>TTI</span></div><p class="footer-tagline">From earth, for the wall.</p></div>
         <div><h4>Explore</h4><ul class="footer-links"><li><a href="../#gallery">Gallery</a></li><li><a href="../blog/">Blog</a></li></ul></div>
         <div><h4>Support</h4><ul class="footer-links"><li><a href="../faq/">FAQ</a></li><li><a href="../shipping/">Shipping</a></li><li><a href="../payment/">Payment</a></li></ul></div>
-        <div><h4>Connect</h4><ul class="footer-links"><li><a href="https://www.instagram.com/saumya.chaurasia04?igsh=MXZqc2xlZDV2YWdiaQ==">Instagram</a></li><li><a href="https://www.facebook.com/profile.php?id=100077641696027">Facebook</a></li></ul></div>
+        <div><h4>Connect</h4><ul class="footer-links"><li><a href="{insta_url}">Instagram</a></li><li><a href="{fb_url}">Facebook</a></li></ul></div>
       </div>
       <div class="footer-bottom">&copy; 2026 MITTI Art Gallery.</div>
     </div>
@@ -600,6 +666,6 @@ for slug, (title, qa_list) in pages.items():
 
     with open(os.path.join(pdir, "index.html"), "w", encoding="utf-8") as f:
         f.write(html)
-    print("OK {}/index.html".format(slug))
+    print(f"OK {slug}/index.html")
 
-print("\nDONE: All pages generated successfully!")
+print("\n=== ALL DONE ===")
