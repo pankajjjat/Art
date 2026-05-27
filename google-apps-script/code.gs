@@ -202,7 +202,24 @@ function getStats() {
 // ─── ORDER SUBMISSION (POST) — for future contact form / checkout ──────────
 function doPost(e) {
   try {
-    const data = JSON.parse(e?.postData?.contents || '{}');
+    // Parse action from: JSON body, query param, or form-encoded body
+    let data;
+    try {
+      data = JSON.parse(e?.postData?.contents || '{}');
+    } catch (_) {
+      data = {};
+    }
+    
+    // Fallback: if body didn't have action, check query params
+    if (!data.action && e?.parameter?.action) {
+      data.action = e.parameter.action;
+    }
+    // Fallback: merge query params into data (for name, email, message)
+    if (e?.parameter) {
+      Object.keys(e.parameter).forEach(k => {
+        if (!data[k]) data[k] = e.parameter[k];
+      });
+    }
     
     if (data.action === 'place-order') {
       const sheet = getSheet('Orders');

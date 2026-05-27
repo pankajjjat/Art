@@ -384,7 +384,7 @@
     btn.textContent = 'Sending...';
     status.textContent = '';
     // Try API POST first, fallback to mailto
-    var payload = { name: name, email: email, message: message };
+    var payload = { action: 'contact', name: name, email: email, message: message };
     var apiBase = (typeof MITTI_API !== 'undefined' && MITTI_API.isConfigured) ? MITTI_API.API_BASE : 'https://script.google.com/macros/s/AKfycbzkCiuErQFp0yPkysq3k518pjFSJ-n0bbT7abZ1ibHql45zAouGjeC1-y7mvyjnKcMFQg/exec';
     fetch(apiBase + '?action=contact', { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=UTF-8' }, body: JSON.stringify(payload) })
       .then(function() {
