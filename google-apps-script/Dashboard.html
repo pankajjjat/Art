@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #1A1612;
+      color: #E8DED0;
+      padding: 16px;
+    }
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #C2623E;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    h1 small { font-size: 12px; color: #8A7E72; font-weight: 400; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #25211C;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+    }
+    .stat-card .num {
+      font-size: 28px;
+      font-weight: 700;
+      color: #D4A84B;
+    }
+    .stat-card .label {
+      font-size: 11px;
+      color: #8A7E72;
+      margin-top: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .stat-card .sub {
+      font-size: 10px;
+      color: #6B6056;
+      margin-top: 2px;
+    }
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #C2623E;
+      margin: 16px 0 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .contact-item {
+      background: #25211C;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 6px;
+      border-left: 3px solid #D4A84B;
+    }
+    .contact-item .name {
+      font-weight: 600;
+      font-size: 13px;
+      color: #E8DED0;
+    }
+    .contact-item .email {
+      font-size: 11px;
+      color: #8A7E72;
+    }
+    .contact-item .msg {
+      font-size: 12px;
+      color: #C4B8A8;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+    .contact-item .date {
+      font-size: 10px;
+      color: #6B6056;
+      margin-top: 2px;
+    }
+    .contact-item .badge {
+      display: inline-block;
+      font-size: 9px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+    .badge-new { background: #C2623E; color: #1A1612; }
+    .badge-read { background: #3A332C; color: #8A7E72; }
+    .btn {
+      background: #C2623E;
+      border: none;
+      color: #1A1612;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 12px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #D4724E; }
+    .btn-secondary {
+      background: #3A332C;
+      color: #E8DED0;
+    }
+    .btn-secondary:hover { background: #4A433C; }
+    .loading {
+      text-align: center;
+      padding: 40px 0;
+      color: #6B6056;
+      font-size: 13px;
+    }
+    .empty-state {
+      text-align: center;
+      padding: 20px 0;
+      color: #6B6056;
+      font-size: 12px;
+    }
+    .footer-actions {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .toast {
+      background: #2A6B3C;
+      color: #FFF;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      text-align: center;
+      margin-bottom: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="toast" class="toast"></div>
+  <h1>🌍 MITTI <small>Dashboard</small></h1>
+  <div id="stats" class="stats-grid"></div>
+  <div class="section-title">Recent Inquiries</div>
+  <div id="contacts"></div>
+  <div class="footer-actions">
+    <button class="btn" onclick="refresh()">↻ Refresh</button>
+    <button class="btn btn-secondary" onclick="google.script.run.withSuccessHandler(function(){showToast('Contacts tab ready!')}).ensureContactsSheet()">+ Create Contacts Tab</button>
+  </div>
+
+  <script>
+    function refresh() {
+      document.getElementById('contacts').innerHTML = '<div class="loading">Loading...</div>';
+      google.script.run
+        .withSuccessHandler(renderStats)
+        .getDashboardStats();
+      
+      google.script.run
+        .withSuccessHandler(renderContacts)
+        .getContacts();
+    }
+    
+    function renderStats(stats) {
+      document.getElementById('stats').innerHTML = [
+        '<div class="stat-card"><div class="num">' + stats.totalArtworks + '</div><div class="label">Products</div><div class="sub">' + stats.inStock + ' in stock</div></div>',
+        '<div class="stat-card"><div class="num">' + stats.categories + '</div><div class="label">Categories</div><div class="sub">₹' + stats.priceMin + ' – ₹' + stats.priceMax + '</div></div>',
+        '<div class="stat-card"><div class="num">' + stats.orders + '</div><div class="label">Orders</div><div class="sub">● ● ●</div></div>',
+        '<div class="stat-card"><div class="num">' + stats.contacts + '</div><div class="label">Inquiries</div><div class="sub">' + stats.unreadContacts + ' unread</div></div>'
+      ].join('');
+    }
+    
+    function renderContacts(contacts) {
+      var html = '';
+      if (!contacts || contacts.length === 0) {
+        html = '<div class="empty-state">No inquiries yet.</div>';
+      } else {
+        contacts.forEach(function(c) {
+          var badge = c.status === 'New' ? '<span class="badge badge-new">NEW</span>' : '<span class="badge badge-read">read</span>';
+          var date = c.timestamp ? new Date(c.timestamp).toLocaleDateString('en-IN', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '';
+          html += [
+            '<div class="contact-item">',
+            '  <div><span class="name">' + escapeHtml(c.name || 'Anonymous') + '</span> ' + badge + '</div>',
+            '  <div class="email">' + escapeHtml(c.email || '') + (c.phone ? ' · ' + escapeHtml(c.phone) : '') + '</div>',
+            '  <div class="msg">' + escapeHtml(c.message || '') + '</div>',
+            '  <div class="date">' + date + '</div>',
+            '</div>'
+          ].join('\n');
+        });
+      }
+      document.getElementById('contacts').innerHTML = html;
+    }
+    
+    function escapeHtml(s) {
+      if (!s) return '';
+      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+    
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(function(){ t.style.display = 'none'; }, 3000);
+    }
+    
+    // Auto-load on open
+    refresh();
+  </script>
+</body>
+</html>

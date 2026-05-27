@@ -434,3 +434,86 @@ function fixArtworkData() {
   console.log(msg);
   SpreadsheetApp.getUi().alert(msg);
 }
+
+// ─── DASHBOARD — custom menu + sidebar ──────────────────────────────────────
+
+/**
+ * Runs automatically when the sheet opens — adds the MITTI menu.
+ */
+function onOpen() {
+  SpreadsheetApp.getUi()
+    .createMenu('🌍 MITTI')
+    .addItem('📊 Dashboard', 'showDashboard')
+    .addSeparator()
+    .addItem('✚ Create Contacts Tab', 'ensureContactsSheet')
+    .addItem('📦 Fix Prices & Stock', 'fixArtworkData')
+    .addToUi();
+}
+
+/**
+ * Opens the Dashboard sidebar.
+ */
+function showDashboard() {
+  const html = HtmlService.createHtmlOutputFromFile('Dashboard')
+    .setTitle('MITTI Dashboard')
+    .setWidth(320);
+  SpreadsheetApp.getUi().showSidebar(html);
+}
+
+/**
+ * Returns summary stats for the dashboard sidebar.
+ */
+function getDashboardStats() {
+  try {
+    const artworks = getArtworks();
+    const orders = getOrders();
+    
+    let contacts = [];
+    try {
+      contacts = getContacts();
+    } catch (_) { /* Contacts tab may not exist yet */ }
+    
+    const prices = artworks.map(a => Number(a.price) || 0);
+    
+    return {
+      totalArtworks: artworks.length,
+      inStock: artworks.filter(a => a.inStock !== false).length,
+      categories: [...new Set(artworks.map(a => a.category).filter(Boolean))].length,
+      priceMin: prices.length ? Math.min(...prices) : 0,
+      priceMax: prices.length ? Math.max(...prices) : 0,
+      orders: orders.length,
+      contacts: contacts.length,
+      unreadContacts: contacts.filter(c => (c.status || '').toString().toLowerCase() === 'new').length
+    };
+  } catch (err) {
+    return { error: err.message };
+  }
+}
+
+/**
+ * Returns contact form submissions (from Contacts sheet).
+ */
+function getContacts() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Contacts');
+  if (!sheet) return [];
+  return getSheetWithId('Contacts');
+}
+
+/**
+ * Safely creates the Contacts tab if it doesn't exist.
+ * Won't overwrite existing data.
+ */
+function ensureContactsSheet() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName('Contacts');
+  if (sheet) {
+    SpreadsheetApp.getUi().alert('Contacts tab already exists!');
+    return;
+  }
+  sheet = ss.insertSheet('Contacts');
+  const headers = [['timestamp', 'name', 'email', 'phone', 'message', 'status']];
+  sheet.getRange(1, 1, 1, headers[0].length).setValues(headers);
+  sheet.setFrozenRows(1);
+  sheet.autoResizeColumns(1, headers[0].length);
+  SpreadsheetApp.getUi().alert('✅ Contacts tab created! Inquiries from the website will appear here.');
+}

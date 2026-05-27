@@ -11,7 +11,9 @@
 1. In the sheet, go to **Extensions → Apps Script**
 2. Delete the default `myFunction()` code
 3. Paste the contents of `code.gs` into the editor
-4. Click the save icon (💾) and name the project **MITTI CMS API**
+4. **Also create a new HTML file:** File → New → HTML file → name it `Dashboard`
+   - Copy the contents of `Dashboard.html` from the repo into this file
+5. Click the save icon (💾) and name the project **MITTI CMS API**
 
 ## Step 3: Run the Sheet Creator (first time only)
 
@@ -19,7 +21,18 @@
 2. Click **Run** — it will ask for permissions (review your own sheet data)
 3. After running, check your Google Sheet — all tabs should exist with sample data
 
-## Step 4: Deploy as Web App
+## Step 3: Create the Contacts Tab (skip if it already exists)
+
+Run the **ensureContactsSheet()** function in the Apps Script editor to create the Contacts tab. This only adds the tab — it won't touch your existing data.
+
+## Step 3b: Run the Dashboard Setup
+
+1. Save the project, then **reload your Google Sheet**
+2. You'll see a new **🌍 MITTI** menu appear in the sheet toolbar
+3. Click **🌍 MITTI → 📊 Dashboard** to open the sidebar dashboard
+4. Run **🌍 MITTI → ✚ Create Contacts Tab** to add the Contacts sheet (if not done above)
+
+## Step 5: Deploy as Web App
 
 1. Click **Deploy → New deployment**
 2. Choose type: **Web app**
@@ -32,10 +45,10 @@
    `https://script.google.com/macros/s/ABC123.../exec`
 6. Click **Done**
 
-## Step 5: Configure the Frontend
+## Step 6: Configure the Frontend
 
 1. Open `js/api.js` in the project
-2. Replace `YOUR_DEPLOYED_SCRIPT_URL` with the URL from Step 4
+2. Replace `YOUR_DEPLOYED_SCRIPT_URL` with the URL from Step 5
 3. Commit and push to GitHub:
 
 ```bash
